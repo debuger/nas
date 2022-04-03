@@ -11,7 +11,7 @@ services:
       - PUID=${CUSTOM_UID}
       - PGID=${CUSTOM_GID}
       - VERSION=docker
-      - PLEX_CLAIM=claim-2NDKxB9mMb27KQomd2mN
+      - PLEX_CLAIM=${PLEX_API_KEY}
     volumes:
       - plexlibrary:/config
       - movies:/movies
@@ -81,7 +81,7 @@ services:
     environment:
       - PUID=${CUSTOM_UID}
       - PGID=${CUSTOM_GID}
-      - TZ=Europe/Minsk
+      - TZ=${TZ}
       - DOCKER_MODS=linuxserver/calibre-web:calibre
     volumes:
       - calibrelibrary:/config
@@ -110,9 +110,10 @@ services:
     environment:
       - PUID=${CUSTOM_UID}
       - PGID=${CUSTOM_GID}
-      - TZ=Europe/Minsk
+      - TZ=${TZ}
       - USER=${TRANS_USER}
       - PASS=${TRANS_PASSWORD}
+      - TRANSMISSION_WEB_HOME=/kettu/
     volumes:
       - transmissiondata:/config
       - downloads:/downloads
