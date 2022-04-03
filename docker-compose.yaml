@@ -77,7 +77,6 @@ services:
   calibre-web:
     image: ghcr.io/linuxserver/calibre-web:version-0.6.16
     container_name: calibre-web
-    user: ${CUSTOM_UID}:${CUSTOM_GID}
     environment:
       - PUID=${CUSTOM_UID}
       - PGID=${CUSTOM_GID}
@@ -106,7 +105,6 @@ services:
   transmissionbt:
     image: lscr.io/linuxserver/transmission:version-3.00-r5
     container_name: transmission
-    user: ${CUSTOM_UID}:${CUSTOM_GID}
     environment:
       - PUID=${CUSTOM_UID}
       - PGID=${CUSTOM_GID}
@@ -118,7 +116,6 @@ services:
       - transmissiondata:/config
       - downloads:/downloads
     ports:
-      - 9091:9091
       - 51413:51413
       - 51413:51413/udp
     env_file:

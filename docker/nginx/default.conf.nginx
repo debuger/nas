@@ -172,3 +172,13 @@ server {
         proxy_pass http://plex:32400;
     }   
 }
+
+server {
+    listen 8090;
+    error_log  /log/nginx/transmission.log warn;
+    access_log /log/nginx/transmission.log;
+    server_name transmission.myserver.lo;
+    location / {
+        proxy_pass http://transmission:9091;
+    }   
+}
