@@ -6,7 +6,6 @@ services:
       context: .
       dockerfile: ${PWD}/docker/plex/Dockerfile
     container_name: plex
-    #network_mode: host
     environment:
       - PUID=${CUSTOM_UID}
       - PGID=${CUSTOM_GID}
@@ -15,7 +14,7 @@ services:
     volumes:
       - plexlibrary:/config
       - movies:/movies
-#    restart: unless-stopped
+    restart: unless-stopped
     devices:
       - /dev/dri:/dev/dri
     env_file:
@@ -39,9 +38,9 @@ services:
       - .env
     depends_on:
        - calibre-web
-#       - nextcloud
-#       - php
-#       - plex
+       - nextcloud
+       - php
+       - plex
   php:
     image: php:7.4.13-fpm-alpine3.12
     user: ${CUSTOM_UID}:${CUSTOM_GID}
@@ -88,7 +87,7 @@ services:
       - tmp:/tmp
     env_file:
       - .env
-#    restart: unless-stopped
+    restart: unless-stopped
   mariadb:
     image: mariadb:10.7.3
     container_name: mariadb
@@ -101,7 +100,7 @@ services:
       - mariadb:/var/lib/mysql
     env_file:
       - .env
-#    restart: unless-stopped
+    restart: unless-stopped
   transmissionbt:
     image: lscr.io/linuxserver/transmission:version-3.00-r5
     container_name: transmission
@@ -120,7 +119,7 @@ services:
       - 51413:51413/udp
     env_file:
       - .env
-#    restart: unless-stopped
+    restart: unless-stopped
 volumes:
   plexlibrary:
     driver_opts:
