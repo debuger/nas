@@ -98,6 +98,7 @@ services:
       - MARIADB_PASSWORD=${MARIADB_PASSWORD}
     volumes:
       - mariadb:/var/lib/mysql
+      - mariadbinit:/docker-entrypoint-initdb.d
     env_file:
       - .env
     restart: unless-stopped
@@ -168,6 +169,12 @@ volumes:
       type: bind
       o: bind
       device: "${PWD}/system/db"
+  mariadbinit:
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/docker/mariadb/init"
   log: 
     driver: local
     driver_opts:
