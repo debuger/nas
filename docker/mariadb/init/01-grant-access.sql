@@ -1,2 +1,2 @@
 CREATE DATABASE IF NOT EXISTS nextcloud;
-GRANT ALL ON nextcloud.* TO user@'%';
+GRANT ALL ON nextcloud.* TO ${MARIADB_USER}@'%';

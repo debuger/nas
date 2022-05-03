@@ -32,8 +32,9 @@ services:
        - tmp:/tmp
        - log:/log/nginx/
        - nextclouddata:/fs/storage
-       - nextcloud:/var/www/html
-       - nextcloudconfig:/var/www/html/config
+       - nextcloud:/var/www/nextcloud
+       - nextcloudconfig:/var/www/nextcloud/config
+       - wwwdata:/var/www/public
     env_file:
       - .env
     depends_on:
@@ -49,6 +50,7 @@ services:
       - ${PWD}/docker/php/php-fpm.conf:/usr/local/etc/php-fpm.d/www.conf
       - ${PWD}/docker/php/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
       - tmp:/tmp
+      - wwwdata:/var/www/public
     env_file:
       - .env
   nextcloud:
@@ -67,8 +69,8 @@ services:
       - NEXTCLOUD_DATA_DIR=/fs/storage
     volumes:
       - nextclouddata:/fs/storage
-      - nextcloud:/var/www/html
-      - nextcloudconfig:/var/www/html/config
+      - nextcloud:/var/www/nextcloud
+      - nextcloudconfig:/var/www/nextcloud/config
     links:
       - mariadb
     env_file:
@@ -187,7 +189,13 @@ volumes:
       type: bind
       o: bind
       device: "${PWD}/fs/nextcloud"
-  nextcloud: 
+  wwwdata: 
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/fs/www"
+  nextcloud:
     driver: local
     driver_opts:
       type: bind
