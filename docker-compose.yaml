@@ -149,6 +149,11 @@ volumes:
       type: bind
       o: bind
       device: "${PWD}/fs/movies"
+  music:
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/fs/music"
   books:
     driver_opts:
       type: bind
