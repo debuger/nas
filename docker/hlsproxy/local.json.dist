@@ -1,0 +1,44 @@
+{
+    "SERVER": {
+        "address": "0.0.0.0",
+        "port": 8085,
+        "isAllowUsersWithAnyToken": false
+    },
+    "playlists": [
+        {
+            "name": "Main",
+            "type": "link",
+            "uri": "uri",
+            "plugin": "",
+            "localCopy": "/data/iptv.m3u8",
+            "isUseLocalAceStreamMediaProxy": false,
+            "aceStreamMediaProxyURL": "http://127.0.0.1:6878",
+            "useLogos": true,
+            "flussonicType": "index",
+            "isPassThrough": false,
+            "isManualUpdate": false,
+            "isEnabled": true,
+            "nameReplacer": [],
+            "headers": {
+                "value": "",
+                "isPlaylist": true,
+                "isM3U8": true,
+                "isChunk": true
+            },
+            "remotePath": "",
+            "ffmpegCommand": ""
+        }
+    ],
+    "epg": {
+        "tvGuideUrl": [
+            "http://epg.it999.ru/epg2.xml.gz"
+        ],
+        "filename": "/data/epg.xml.gz",
+        "cacheDir": "/data/epg-cache"
+    },
+    "serverName": "",
+    "FFMPEG": {
+        "workingDir": "/data/ffmpeg",
+        "timeout": 0
+    }
+}

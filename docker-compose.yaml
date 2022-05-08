@@ -114,6 +114,20 @@ services:
     env_file:
       - .env
     restart: unless-stopped
+  hlsproxy:
+    build:
+      context: ${PWD}/docker/hlsproxy
+      dockerfile: ${PWD}/docker/hlsproxy/Dockerfile
+    container_name: hlsproxy
+    user: ${CUSTOM_UID}:${CUSTOM_GID}
+    environment:
+      - PORT=${HLSPROXY_PORT}
+    volumes:
+      - hlsproxycache:/data
+      - ${PWD}/docker/hlsproxy/local.json:/opt/hlsproxy/local.json
+    env_file:
+      - .env
+    restart: unless-stopped
   transmissionbt:
     image: lscr.io/linuxserver/transmission:version-3.00-r5
     container_name: transmission
@@ -228,3 +242,9 @@ volumes:
       type: bind
       o: bind
       device: "${PWD}/system/transmission"
+  hlsproxycache: 
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/system/hlsproxy"
