@@ -192,3 +192,13 @@ server {
         proxy_pass http://hlsproxy:9085;
     }   
 }
+
+server {
+    listen 8090;
+    error_log  /log/nginx/xteve.log warn;
+    access_log /log/nginx/xteve.log;
+    server_name xteve.myserver.lo;
+    location / {
+        proxy_pass http://xteve:34400;
+    }   
+}

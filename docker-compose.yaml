@@ -124,9 +124,26 @@ services:
       - PORT=${HLSPROXY_PORT}
     volumes:
       - hlsproxycache:/data
-      - ${PWD}/docker/hlsproxy/local.json:/opt/hlsproxy/local.json
+      - ${PWD}/docker/hlsproxy/local.json:/opt/hlsp/local.json:ro
     env_file:
       - .env
+    restart: unless-stopped
+  xteve:
+    build:
+      context: ${PWD}/docker/xteve
+      dockerfile: ${PWD}/docker/xteve/Dockerfile
+    container_name: xteve
+    user: ${CUSTOM_UID}:${CUSTOM_GID}
+    environment:
+      - PORT=${XTEVE_PORT}
+      - TZ=${TZ}
+    volumes:
+      - xtevedata:/xteve
+      - ${PWD}/docker/xteve/settings.json:/xteve/settings.json:ro
+    env_file:
+      - .env
+    depends_on:
+      - hlsproxy
     restart: unless-stopped
   transmissionbt:
     image: lscr.io/linuxserver/transmission:version-3.00-r5
@@ -248,3 +265,9 @@ volumes:
       type: bind
       o: bind
       device: "${PWD}/system/hlsproxy"
+  xtevedata: 
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/system/xteve"
