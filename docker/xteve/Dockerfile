@@ -18,4 +18,4 @@ VOLUME /xteve
 EXPOSE ${PORT}
 
 # Entrypoint
-ENTRYPOINT ["/usr/bin/xteve", "-port=${PORT}", "-config=/xteve"]
+ENTRYPOINT /usr/bin/xteve -port=${PORT} -config=/xteve
