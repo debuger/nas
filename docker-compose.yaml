@@ -14,6 +14,7 @@ services:
     volumes:
       - plexlibrary:/config
       - movies:/movies
+      - music:/music
     restart: unless-stopped
     ports:
       - "32400:32400"
