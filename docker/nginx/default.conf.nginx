@@ -1,7 +1,7 @@
 server {
     listen 8090;
     index index.php index.html;
-    server_name myserver.lo
+    server_name myserver.lo;
     error_log  /log/nginx/error.log;
     access_log /log/nginx/access.log;
     root /var/www/public;

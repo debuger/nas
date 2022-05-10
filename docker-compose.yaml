@@ -29,6 +29,8 @@ services:
       - /dev/dri:/dev/dri
     env_file:
       - .env
+    depends_on:
+      - xteve
   www:
     build:
       context: .
@@ -125,6 +127,9 @@ services:
     volumes:
       - hlsproxycache:/data
       - ${PWD}/docker/hlsproxy/local.json:/opt/hlsp/local.json:ro
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+      - /dev/dri:/dev/dri
     env_file:
       - .env
     restart: unless-stopped
@@ -139,7 +144,10 @@ services:
       - TZ=${TZ}
     volumes:
       - xtevedata:/xteve
-      - ${PWD}/docker/xteve/settings.json:/xteve/settings.json:ro
+      - ${PWD}/docker/xteve/settings.json:/xteve/settings.json
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+      - /dev/dri:/dev/dri
     env_file:
       - .env
     depends_on:
