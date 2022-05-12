@@ -189,7 +189,7 @@ server {
     access_log /log/nginx/hlsproxy.log;
     server_name hlsproxy.myserver.lo;
     location / {
-        proxy_pass http://hlsproxy:9085;
+        proxy_pass http://hlsproxy:8085;
     }   
 }
 
@@ -200,5 +200,12 @@ server {
     server_name xteve.myserver.lo;
     location / {
         proxy_pass http://xteve:34400;
-    }   
+    }
+    location /data/ {
+        proxy_pass http://xteve:34400;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $host;
+    }
 }
