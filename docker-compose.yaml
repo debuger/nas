@@ -15,6 +15,8 @@ services:
       - plexlibrary:/config
       - movies:/movies
       - music:/music
+      - downloadsmusic: /music/downloads
+      - downloadsvideo: /movies/downloads
     restart: unless-stopped
     ports:
       - "32400:32400"
@@ -199,11 +201,21 @@ volumes:
       type: bind
       o: bind
       device: "${PWD}/fs/books"
-  downloads: 
+  downloads:
     driver_opts:
       type: bind
       o: bind
       device: "${PWD}/fs/downloads"
+  downloadsmusic:
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/fs/downloads/Music"
+  downloadsvideo:
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/fs/downloads/Video"
   tmp:
     driver_opts:
       type: bind
