@@ -1,0 +1,293 @@
+version: "3.7"
+services:
+  plex:
+    build:
+      context: .
+      dockerfile: ${PWD}/docker/plex/Dockerfile
+    container_name: plex
+    environment:
+      - PUID=${CUSTOM_UID}
+      - PGID=${CUSTOM_GID}
+      - VERSION=docker
+      - PLEX_CLAIM=${PLEX_API_KEY}
+    volumes:
+      - plexlibrary:/config
+      - movies:/movies
+      - music:/music
+      - downloadsmusic:/music/downloads
+      - downloadsvideo:/movies/downloads
+    restart: unless-stopped
+    ports:
+      - "32400:32400"
+      - "1900:1900/udp"
+      - "3005:3005"
+      - "8324:8324"
+      - "32410:32410/udp"
+      - "32412:32412/udp"
+      - "32413:32413/udp"
+      - "32414:32414/udp"
+      - "32469:32469"
+    devices:
+      - /dev/dri:/dev/dri
+    env_file:
+      - .env
+    depends_on:
+      - xteve
+  www:
+    build:
+      context: .
+      dockerfile: ${PWD}/docker/nginx/Dockerfile
+    ports:
+      - "80:8090"
+      - "443:443"
+    user: ${CUSTOM_UID}:${CUSTOM_GID}
+    volumes:
+       - ${PWD}/docker/nginx/default.conf.nginx:/etc/nginx/conf.d/default.conf
+       - tmp:/tmp
+       - log:/log/nginx/
+       - nextclouddata:/fs/storage
+       - nextcloud:/var/www/nextcloud
+       - nextcloudconfig:/var/www/nextcloud/config
+       - wwwdata:/var/www/public
+    env_file:
+      - .env
+    depends_on:
+       - calibre-web
+       - nextcloud
+       - php
+       - plex
+  php:
+    image: php:7.4.30-fpm-alpine3.15
+    user: ${CUSTOM_UID}:${CUSTOM_GID}
+    volumes:
+      - sock:/sock
+      - ${PWD}/docker/php/php-fpm.conf:/usr/local/etc/php-fpm.d/www.conf
+      - ${PWD}/docker/php/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
+      - tmp:/tmp
+      - wwwdata:/var/www/public
+    env_file:
+      - .env
+  nextcloud:
+    build:
+      context: .
+      dockerfile: ${PWD}/docker/nextcloud/Dockerfile
+    image: nextcloud:23.0.6-fpm-alpine
+    user: ${CUSTOM_UID}:${CUSTOM_GID}
+    environment:
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=${MARIADB_USER}
+      - MYSQL_PASSWORD=${MARIADB_PASSWORD}
+      - MYSQL_HOST=mariadb
+      - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN_USER}
+      - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD}
+      - NEXTCLOUD_DATA_DIR=/fs/storage
+    volumes:
+      - nextclouddata:/fs/storage
+      - nextcloud:/var/www/nextcloud
+      - nextcloudconfig:/var/www/nextcloud/config
+    links:
+      - mariadb
+    env_file:
+      - .env
+  calibre-web:
+    image: ghcr.io/linuxserver/calibre-web:version-0.6.18
+    container_name: calibre-web
+    environment:
+      - PUID=${CUSTOM_UID}
+      - PGID=${CUSTOM_GID}
+      - TZ=${TZ}
+      - DOCKER_MODS=linuxserver/calibre-web:calibre
+    volumes:
+      - calibrelibrary:/config
+      - books:/books
+      - tmp:/tmp
+    env_file:
+      - .env
+    restart: unless-stopped
+  mariadb:
+    image: mariadb:10.7.4
+    container_name: mariadb
+    user: ${CUSTOM_UID}:${CUSTOM_GID}
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MARIADB_USER=${MARIADB_USER}
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD}
+    volumes:
+      - mariadb:/var/lib/mysql
+      - mariadbinit:/docker-entrypoint-initdb.d
+    env_file:
+      - .env
+    restart: unless-stopped
+  hlsproxy:
+    build:
+      context: ${PWD}/docker/hlsproxy
+      dockerfile: ${PWD}/docker/hlsproxy/Dockerfile
+    container_name: hlsproxy
+    user: ${CUSTOM_UID}:${CUSTOM_GID}
+    environment:
+      - PORT=${HLSPROXY_PORT}
+    volumes:
+      - hlsproxycache:/data
+      - ${PWD}/docker/hlsproxy/local.json:/opt/hlsp/local.json:ro
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+      - /dev/dri:/dev/dri
+    env_file:
+      - .env
+    restart: unless-stopped
+  xteve:
+    build:
+      context: ${PWD}/docker/xteve
+      dockerfile: ${PWD}/docker/xteve/Dockerfile
+    container_name: xteve
+    user: ${CUSTOM_UID}:${CUSTOM_GID}
+    environment:
+      - PORT=${XTEVE_PORT}
+      - TZ=${TZ}
+    volumes:
+      - xtevedata:/xteve
+      - ${PWD}/docker/xteve/settings.json:/xteve/settings.json
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+      - /dev/dri:/dev/dri
+    env_file:
+      - .env
+    depends_on:
+      - hlsproxy
+    restart: unless-stopped
+  transmissionbt:
+    image: lscr.io/linuxserver/transmission:version-3.00-r5
+    container_name: transmission
+    environment:
+      - PUID=${CUSTOM_UID}
+      - PGID=${CUSTOM_GID}
+      - TZ=${TZ}
+      - USER=${TRANS_USER}
+      - PASS=${TRANS_PASSWORD}
+      - TRANSMISSION_WEB_HOME=/kettu/
+    volumes:
+      - transmissiondata:/config
+      - downloads:/downloads
+    ports:
+      - 51413:51413
+      - 51413:51413/udp
+    env_file:
+      - .env
+    restart: unless-stopped
+volumes:
+  plexlibrary:
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/system/plexlibrary"
+  calibrelibrary:
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/system/calibrelibrary"    
+  movies:
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/fs/movies"
+  music:
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/fs/music"
+  books:
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/fs/books"
+  downloads:
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/fs/downloads"
+  downloadsmusic:
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/fs/downloads/Music"
+  downloadsvideo:
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/fs/downloads/Video"
+  tmp:
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/tmp"
+  backend:
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/fs/www"
+  sock:
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/system/sock"
+  mariadb:
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/system/db"
+  mariadbinit:
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/docker/mariadb/init"
+  log: 
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/log"
+  nextclouddata: 
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/fs/nextcloud"
+  wwwdata: 
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/fs/www"
+  nextcloud:
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/system/nextcloud"
+  nextcloudconfig: 
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/system/nextcloudconfig"
+  transmissiondata:
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/system/transmission"
+  hlsproxycache: 
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/system/hlsproxy"
+  xtevedata: 
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/system/xteve"
