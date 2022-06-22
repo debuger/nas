@@ -152,6 +152,7 @@ server {
     error_log  /log/nginx/calibre.log warn;
     access_log /log/nginx/calibre.log;
     server_name calibre.myserver.lo;
+    client_max_body_size 128M;
     location / {
         proxy_set_header        Host $http_host;
         proxy_set_header        X-Real-IP $remote_addr;

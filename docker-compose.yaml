@@ -1,5 +1,4 @@
----
-version: "2"
+version: "3.7"
 services:
   plex:
     build:
@@ -15,8 +14,8 @@ services:
       - plexlibrary:/config
       - movies:/movies
       - music:/music
-      - downloadsmusic: /music/downloads
-      - downloadsvideo: /movies/downloads
+      - downloadsmusic:/music/downloads
+      - downloadsvideo:/movies/downloads
     restart: unless-stopped
     ports:
       - "32400:32400"
