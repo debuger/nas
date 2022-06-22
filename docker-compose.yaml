@@ -57,7 +57,7 @@ services:
        - php
        - plex
   php:
-    image: php:7.4.13-fpm-alpine3.12
+    image: php:7.4.30-fpm-alpine3.15
     user: ${CUSTOM_UID}:${CUSTOM_GID}
     volumes:
       - sock:/sock
@@ -71,7 +71,7 @@ services:
     build:
       context: .
       dockerfile: ${PWD}/docker/nextcloud/Dockerfile
-    image: nextcloud:23.0.2-fpm-alpine
+    image: nextcloud:23.0.6-fpm-alpine
     user: ${CUSTOM_UID}:${CUSTOM_GID}
     environment:
       - MYSQL_DATABASE=nextcloud
@@ -105,7 +105,7 @@ services:
       - .env
     restart: unless-stopped
   mariadb:
-    image: mariadb:10.7.3
+    image: mariadb:10.7.4
     container_name: mariadb
     user: ${CUSTOM_UID}:${CUSTOM_GID}
     environment:
