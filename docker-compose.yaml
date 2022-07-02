@@ -128,7 +128,7 @@ services:
       - PORT=${HLSPROXY_PORT}
     volumes:
       - hlsproxycache:/data
-      - ${PWD}/docker/hlsproxy/local.json:/opt/hlsp/local.json:ro
+      - ${PWD}/docker/hlsproxy/local.json:/opt/hlsp/local.json
     devices:
       - /dev/dri:/dev/dri
     env_file:

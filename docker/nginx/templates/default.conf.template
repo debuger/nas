@@ -4,6 +4,10 @@ server {
     server_name ${NGINX_HOST};
     error_log  /log/nginx/error.log;
     access_log /log/nginx/access.log;
+    gzip_static on;
+    gzip on;
+    gunzip on;
+    gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript text/json;
     root /var/www/public;
     location ~ \.php$ {
         try_files $uri =404;
@@ -190,6 +194,12 @@ server {
     access_log /log/nginx/hlsproxy.log;
     server_name hlsproxy.${NGINX_HOST};
     location / {
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_pass http://hlsproxy:8085;
     }   
 }
