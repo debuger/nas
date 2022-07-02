@@ -8,7 +8,7 @@ It should work!
 
 Should be mentioned
 ----
-Some ideas was used from [notes' series on habr](https://habr.com/ru/post/548640/)
+Some ideas was used from [notes' series on habr](https://habr.com/ru/post/548640/) [and one more article](https://habr.com/ru/company/timeweb/blog/645155/)
 
 Docker images used:
 -----
@@ -20,3 +20,4 @@ Docker images used:
 * [mariadb](https://hub.docker.com/_/mariadb)
 * [transmission](https://hub.docker.com/r/linuxserver/transmission)
 * [alpine v3.15.4](https://hub.docker.com/_/alpine)
+
