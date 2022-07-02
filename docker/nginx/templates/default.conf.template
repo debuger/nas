@@ -1,7 +1,7 @@
 server {
     listen 8090;
     index index.php index.html;
-    server_name myserver.lo;
+    server_name ${NGINX_HOST};
     error_log  /log/nginx/error.log;
     access_log /log/nginx/access.log;
     root /var/www/public;
@@ -19,7 +19,7 @@ server {
     listen 8090;
     error_log  /log/nginx/nextcloud.log error;
     access_log /log/nginx/nextcloud.log;
-    server_name nextcloud.myserver.lo;
+    server_name nextcloud.${NGINX_HOST};
     client_max_body_size 512M;
     fastcgi_buffers 64 4K;
 
@@ -151,7 +151,7 @@ server {
     listen 8090;
     error_log  /log/nginx/calibre.log warn;
     access_log /log/nginx/calibre.log;
-    server_name calibre.myserver.lo;
+    server_name calibre.${NGINX_HOST};
     client_max_body_size 128M;
     location / {
         proxy_set_header        Host $http_host;
@@ -169,7 +169,7 @@ server {
     listen 8090;
     error_log  /log/nginx/plex.log warn;
     access_log /log/nginx/plex.log;
-    server_name plex.myserver.lo;
+    server_name plex.${NGINX_HOST};
     location / {
         proxy_pass http://plex:32400;
     }   
@@ -179,7 +179,7 @@ server {
     listen 8090;
     error_log  /log/nginx/transmission.log warn;
     access_log /log/nginx/transmission.log;
-    server_name transmission.myserver.lo;
+    server_name transmission.${NGINX_HOST};
     location / {
         proxy_pass http://transmission:9091;
     }   
@@ -188,7 +188,7 @@ server {
     listen 8090;
     error_log  /log/nginx/hlsproxy.log warn;
     access_log /log/nginx/hlsproxy.log;
-    server_name hlsproxy.myserver.lo;
+    server_name hlsproxy.${NGINX_HOST};
     location / {
         proxy_pass http://hlsproxy:8085;
     }   
@@ -198,7 +198,7 @@ server {
     listen 8090;
     error_log  /log/nginx/xteve.log warn;
     access_log /log/nginx/xteve.log;
-    server_name xteve.myserver.lo;
+    server_name xteve.${NGINX_HOST};
     location / {
         proxy_pass http://xteve:34400;
     }
