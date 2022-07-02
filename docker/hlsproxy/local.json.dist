@@ -39,6 +39,7 @@
     "serverName": "",
     "FFMPEG": {
         "workingDir": "/data/ffmpeg",
-        "timeout": 0
+        "timeout": 0,
+        "command": "-vaapi_device /dev/dri/renderD128 -re -noaccurate_seek -reconnect_at_eof 1 -reconnect_streamed 1 -reconnect_on_network_error 1 -reconnect_on_http_error 1 -reconnect_delay_max 3 -i \"${SOURCE}\" -codec copy -g 60 -fflags +genpts -f hls -hls_init_time 3 -hls_time 5 -hls_list_size 8 -hls_segment_filename s_%06d.ts -hls_allow_cache 0 -hls_flags delete_segments -hide_banner -nostats -loglevel error -metadata service_name=\"${NAME}\" -user_agent \"${USERAGENT}\" -y ${M3U8FILE}"
     }
 }
