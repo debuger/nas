@@ -156,7 +156,8 @@ server {
     error_log  /log/nginx/calibre.log warn;
     access_log /log/nginx/calibre.log;
     server_name calibre.${NGINX_HOST};
-    client_max_body_size 128M;
+    client_max_body_size 512M;
+    large_client_header_buffers 4 32k
     location / {
         proxy_set_header        Host $http_host;
         proxy_set_header        X-Real-IP $remote_addr;
@@ -175,6 +176,7 @@ server {
     access_log /log/nginx/plex.log;
     server_name plex.${NGINX_HOST};
     client_max_body_size 128M;
+    large_client_header_buffers 4 32k
     location / {
         proxy_pass http://plex:32400;
     }   
