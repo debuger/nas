@@ -172,17 +172,6 @@ services:
     env_file:
       - .env
     restart: unless-stopped
-  dvr-proxy:
-    build:
-      context: ${PWD}/docker/plex-dvr-hls
-      dockerfile: ${PWD}/docker/plex-dvr-hls/Dockerfile
-    volumes:
-      - ${PWD}/docker/plex-dvr-hls/config.json:/app/config.json
-      - ${PWD}/docker/plex-dvr-hls/channels.json:/app/channels.json
-    ports:
-      - 5004:5004
-    environment:
-      - GIN_MODE=release
 volumes:
   plexlibrary:
     driver_opts:
