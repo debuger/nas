@@ -56,6 +56,9 @@ services:
        - nextcloud
        - php
        - plex
+       - hlsproxy
+       - xteve
+       - transmissionbt
   php:
     image: php:7.4.30-fpm-alpine3.15
     user: ${CUSTOM_UID}:${CUSTOM_GID}
@@ -89,6 +92,8 @@ services:
       - mariadb
     env_file:
       - .env
+    depends_on:
+      - mariadb
   calibre-web:
     image: ghcr.io/linuxserver/calibre-web:version-0.6.18
     container_name: calibre-web
