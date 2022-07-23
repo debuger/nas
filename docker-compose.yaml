@@ -51,11 +51,15 @@ services:
        - wwwdata:/var/www/public
     env_file:
       - .env
+    restart: unless-stopped
     depends_on:
        - calibre-web
        - nextcloud
        - php
        - plex
+       - hlsproxy
+       - xteve
+       - transmissionbt
   php:
     image: php:7.4.30-fpm-alpine3.15
     user: ${CUSTOM_UID}:${CUSTOM_GID}
@@ -67,6 +71,7 @@ services:
       - wwwdata:/var/www/public
     env_file:
       - .env
+    restart: unless-stopped
   nextcloud:
     build:
       context: .
@@ -89,6 +94,9 @@ services:
       - mariadb
     env_file:
       - .env
+    depends_on:
+      - mariadb
+    restart: unless-stopped
   calibre-web:
     image: ghcr.io/linuxserver/calibre-web:version-0.6.18
     container_name: calibre-web
@@ -167,7 +175,7 @@ services:
       - transmissiondata:/config
       - downloads:/downloads
     ports:
-      - 51413:51413
+      - 51413:51413/tcp
       - 51413:51413/udp
     env_file:
       - .env
