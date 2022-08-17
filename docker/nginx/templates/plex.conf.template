@@ -1,0 +1,16 @@
+server {
+    listen ${NGINX_PORT};
+    listen [::]:${NGINX_PORT};
+    error_log  /log/nginx/plex.log warn;
+    access_log /log/nginx/plex.log;
+    server_name plex.${NGINX_HOST};
+    client_max_body_size 128M;
+    large_client_header_buffers 4 32k;
+    location / {
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $host;
+        proxy_pass http://plex:32400;
+    }   
+}

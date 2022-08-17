@@ -1,0 +1,10 @@
+server {
+    listen ${NGINX_PORT};
+    listen [::]:${NGINX_PORT};
+    error_log  /log/nginx/transmission.log warn;
+    access_log /log/nginx/transmission.log;
+    server_name transmission.${NGINX_HOST};
+    location / {
+        proxy_pass http://transmission:9091;
+    }   
+}

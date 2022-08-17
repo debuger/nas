@@ -27,6 +27,8 @@ services:
       - "32413:32413/udp"
       - "32414:32414/udp"
       - "32469:32469"
+      - "50001:50001"
+      - "50002:50002"
     devices:
       - /dev/dri:/dev/dri
     env_file:
@@ -38,8 +40,8 @@ services:
       context: .
       dockerfile: ${PWD}/docker/nginx/Dockerfile
     ports:
-      - "80:8090"
-      - "443:443"
+      - 80:${NGINX_PORT}
+      - 443:${NGINX_SSL_PORT}
     user: ${CUSTOM_UID}:${CUSTOM_GID}
     volumes:
        - ${PWD}/docker/nginx/templates:/etc/nginx/templates
