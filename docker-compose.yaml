@@ -40,8 +40,8 @@ services:
       context: .
       dockerfile: ${PWD}/docker/nginx/Dockerfile
     ports:
-      - "80:8090"
-      - "443:443"
+      - 80:${NGINX_PORT}
+      - 443:${NGINX_SSL_PORT}
     user: ${CUSTOM_UID}:${CUSTOM_GID}
     volumes:
        - ${PWD}/docker/nginx/templates:/etc/nginx/templates
