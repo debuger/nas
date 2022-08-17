@@ -10,6 +10,10 @@ Should be mentioned
 ----
 Some ideas was used from [notes' series on habr](https://habr.com/ru/post/548640/) [and one more article](https://habr.com/ru/company/timeweb/blog/645155/)
 
+Certbot
+----
+docker-compose run --rm  certbot certonly --webroot -v --webroot-path /var/www/certbot/ --config-dir /var/www/certbot/config --logs-dir /var/log/letsencrypt/ --work-dir /var/www/certbot/work -d ${NGINX_HOST}
+
 Docker images used:
 -----
 * [plex](https://hub.docker.com/r/linuxserver/plex)
