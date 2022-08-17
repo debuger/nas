@@ -12,7 +12,11 @@ Some ideas was used from [notes' series on habr](https://habr.com/ru/post/548640
 
 Certbot
 ----
+To generate sertificate run command 
+```
 docker-compose run --rm  certbot certonly --webroot -v --webroot-path /var/www/certbot/ --config-dir /var/www/certbot/config --logs-dir /var/log/letsencrypt/ --work-dir /var/www/certbot/work -d ${NGINX_HOST}
+```
+and update configs after result [see source](https://mindsers.blog/post/https-using-nginx-certbot-docker/)
 
 Docker images used:
 -----
