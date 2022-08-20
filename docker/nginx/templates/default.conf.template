@@ -32,3 +32,33 @@ server {
         fastcgi_param PATH_INFO $fastcgi_path_info;
     }
 }
+
+server {
+    listen ${NGINX_PORT};
+    index index.php index.html;
+    server_name *.${NGINX_HOST};
+    error_log  /log/nginx/404error.log;
+    access_log /log/nginx/404access.log;
+    gzip_static on;
+    gzip on;
+    gunzip on;
+    gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript text/json;
+    root /var/www/public;
+
+    location / {
+        return 404;
+    }
+
+    error_page 404 /errors/404.html;
+
+    location = /errors/404.html {
+        root /var/www/public;
+        internal;
+    }
+    
+    error_page 500 502 503 504 /errors/50x.html;
+    {
+        root /var/www/public;
+        internal;
+    }
+}
