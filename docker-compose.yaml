@@ -73,7 +73,7 @@ services:
       - log:/var/log/letsencrypt/
     env_file:
       - .env
-    restart: never
+    restart: no
   php:
     image: php:7.4.30-fpm-alpine3.15
     user: ${CUSTOM_UID}:${CUSTOM_GID}
