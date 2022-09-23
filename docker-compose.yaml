@@ -51,6 +51,8 @@ services:
        - nextcloud:/var/www/nextcloud
        - nextcloudconfig:/var/www/nextcloud/config
        - wwwdata:/var/www/public
+       - certbot:/var/www/certbot/:ro
+       - certbotconfig:/etc/nginx/ssl/:ro
     env_file:
       - .env
     restart: unless-stopped
@@ -62,6 +64,16 @@ services:
        - hlsproxy
        - xteve
        - transmissionbt
+  certbot:
+    image: certbot/certbot:latest
+    user: ${CUSTOM_UID}:${CUSTOM_GID}
+    volumes:
+      - certbot:/var/www/certbot/:rw
+      - certbotconfig:/etc/letsencrypt/:rw
+      - log:/var/log/letsencrypt/
+    env_file:
+      - .env
+    restart: no
   php:
     image: php:7.4.30-fpm-alpine3.15
     user: ${CUSTOM_UID}:${CUSTOM_GID}
@@ -100,7 +112,7 @@ services:
       - mariadb
     restart: unless-stopped
   calibre-web:
-    image: ghcr.io/linuxserver/calibre-web:version-0.6.18
+    image: ghcr.io/linuxserver/calibre-web:version-0.6.19
     container_name: calibre-web
     environment:
       - PUID=${CUSTOM_UID}
@@ -269,6 +281,16 @@ volumes:
       type: bind
       o: bind
       device: "${PWD}/fs/www"
+  certbot:
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/system/certbot"
+  certbotconfig:
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/system/certbotconfig"
   nextcloud:
     driver: local
     driver_opts:

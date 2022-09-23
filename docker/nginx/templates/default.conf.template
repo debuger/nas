@@ -1,6 +1,9 @@
 #server {
 #   listen ${NGINX_PORT};
 #   listen [::]:${NGINX_PORT};
+#   location /.well-known/acme-challenge/ {
+#       root /var/www/certbot;
+#   }
 #
 #   root /var/www/html;
 #   index index.html index.htm;
@@ -27,5 +30,24 @@ server {
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_param PATH_INFO $fastcgi_path_info;
+    }
+    location /.well-known/acme-challenge/ {
+       root /var/www/certbot;
+
+    location / {
+        return 404;
+    }
+
+    error_page 404 /errors/404.html;
+
+    location = /errors/404.html {
+        root /var/www/public;
+        internal;
+    }
+    
+    error_page 500 502 503 504 /errors/50x.html;
+    {
+        root /var/www/public;
+        internal;
     }
 }
