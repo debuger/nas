@@ -112,7 +112,7 @@ services:
       - mariadb
     restart: unless-stopped
   calibre-web:
-    image: ghcr.io/linuxserver/calibre-web:version-0.6.18
+    image: ghcr.io/linuxserver/calibre-web:version-0.6.19
     container_name: calibre-web
     environment:
       - PUID=${CUSTOM_UID}
