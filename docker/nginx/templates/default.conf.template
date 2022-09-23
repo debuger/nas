@@ -33,20 +33,6 @@ server {
     }
     location /.well-known/acme-challenge/ {
        root /var/www/certbot;
-    }
-}
-
-server {
-    listen ${NGINX_PORT};
-    index index.php index.html;
-    server_name *.${NGINX_HOST};
-    error_log  /log/nginx/404error.log;
-    access_log /log/nginx/404access.log;
-    gzip_static on;
-    gzip on;
-    gunzip on;
-    gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript text/json;
-    root /var/www/public;
 
     location / {
         return 404;
