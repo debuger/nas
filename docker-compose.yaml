@@ -35,6 +35,11 @@ services:
       - .env
     depends_on:
       - xteve
+    logging: &glog
+      driver: journald
+      options: 
+        tag: "{{.ImageName}}/{{.Name}}"
+        max-size: "10Mb"
   www:
     build:
       context: .
@@ -64,6 +69,7 @@ services:
        - hlsproxy
        - xteve
        - transmissionbt
+    logging: *glog
   certbot:
     image: certbot/certbot:v1.30.0
     user: ${CUSTOM_UID}:${CUSTOM_GID}
@@ -76,6 +82,7 @@ services:
     restart: "no"
     entrypoint:
       /usr/local/bin/certbot certonly --webroot -v --webroot-path /var/www/certbot/ --config-dir /var/www/certbot/config --logs-dir /var/log/letsencrypt/ --work-dir /var/www/certbot/work -d ${NGINX_HOST}
+    logging: *glog
   php:
     image: php:7.4.30-fpm-alpine3.15
     user: ${CUSTOM_UID}:${CUSTOM_GID}
@@ -88,6 +95,7 @@ services:
     env_file:
       - .env
     restart: unless-stopped
+    logging: *glog
   nextcloud:
     build:
       context: .
@@ -113,6 +121,7 @@ services:
     depends_on:
       - mariadb
     restart: unless-stopped
+    logging: *glog
   calibre-web:
     image: ghcr.io/linuxserver/calibre-web:version-0.6.19
     container_name: calibre-web
@@ -128,6 +137,7 @@ services:
     env_file:
       - .env
     restart: unless-stopped
+    logging: *glog
   mariadb:
     image: mariadb:10.7.4
     container_name: mariadb
@@ -142,6 +152,7 @@ services:
     env_file:
       - .env
     restart: unless-stopped
+    logging: *glog
   hlsproxy:
     build:
       context: ${PWD}/docker/hlsproxy
@@ -158,6 +169,7 @@ services:
     env_file:
       - .env
     restart: unless-stopped
+    logging: *glog
   xteve:
     build:
       context: ${PWD}/docker/xteve
@@ -177,6 +189,7 @@ services:
     depends_on:
       - hlsproxy
     restart: unless-stopped
+    logging: *glog
   transmissionbt:
     image: lscr.io/linuxserver/transmission:version-3.00-r5
     container_name: transmission
@@ -196,6 +209,7 @@ services:
     env_file:
       - .env
     restart: unless-stopped
+    logging: *glog
 volumes:
   plexlibrary:
     driver_opts:
