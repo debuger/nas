@@ -18,6 +18,37 @@ docker-compose run --rm  certbot certonly --webroot -v --webroot-path /var/www/c
 ```
 and update configs after result [see source](https://mindsers.blog/post/https-using-nginx-certbot-docker/)
 
+Extra for KODI on host machine
+`/usr/lib/systemd/system/kodi.service`
+
+
+```
+[Unit]
+Description = Kodi Media Center (Started with xinit)
+After = systemd-user-sessions.service network.target sound.target
+Conflicts=getty@tty7.service
+
+[Service]
+User = nas
+Group = users
+Type = simple
+TTYPath=/dev/tty7
+ExecStart = /usr/bin/xinit /usr/bin/dbus-launch --exit-with-session /usr/bin/kodi-standalone -- :0 -nolisten tcp vt7
+Restart = on-abort
+RestartSec = 5
+StandardInput = tty
+
+[Install]
+WantedBy = multi-user.target
+
+```
+
+`/etc/permissions.local`
+
+```
+/usr/bin/Xorg root:root 0755
+```
+
 Docker images used:
 -----
 * [plex](https://hub.docker.com/r/linuxserver/plex)
