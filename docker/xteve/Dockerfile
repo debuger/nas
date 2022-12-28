@@ -1,4 +1,4 @@
-FROM alpine:3.15.4
+FROM alpine:3.16.3
 RUN apk update && apk upgrade
 RUN apk add --no-cache curl ca-certificates bash busybox-suid su-exec tzdata ffmpeg vlc
 

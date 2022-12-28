@@ -1,4 +1,4 @@
-FROM alpine:3.15.4
+FROM alpine:3.16.3
 
 ENV PORT ${PORT:-8085}
 RUN apk update && apk upgrade

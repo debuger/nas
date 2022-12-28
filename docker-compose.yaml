@@ -123,7 +123,9 @@ services:
     restart: unless-stopped
     logging: *glog
   calibre-web:
-    image: ghcr.io/linuxserver/calibre-web:version-0.6.19
+    build:
+      context: ${PWD}/docker/calibre
+      dockerfile: ${PWD}/docker/calibre/Dockerfile
     container_name: calibre-web
     environment:
       - PUID=${CUSTOM_UID}
@@ -139,7 +141,9 @@ services:
     restart: unless-stopped
     logging: *glog
   mariadb:
-    image: mariadb:10.7.4
+    build:
+      context: ${PWD}/docker/mariadb
+      dockerfile: ${PWD}/docker/mariadb/Dockerfile
     container_name: mariadb
     user: ${CUSTOM_UID}:${CUSTOM_GID}
     environment:
@@ -191,7 +195,9 @@ services:
     restart: unless-stopped
     logging: *glog
   transmissionbt:
-    image: lscr.io/linuxserver/transmission:version-3.00-r6
+    build:
+      context: ${PWD}/docker/transmission
+      dockerfile: ${PWD}/docker/transmission/Dockerfile
     container_name: transmission
     environment:
       - PUID=${CUSTOM_UID}
