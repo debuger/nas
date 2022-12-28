@@ -84,12 +84,12 @@ services:
       /usr/local/bin/certbot certonly --webroot -v --webroot-path /var/www/certbot/ --config-dir /var/www/certbot/config --logs-dir /var/log/letsencrypt/ --work-dir /var/www/certbot/work -d ${NGINX_HOST}
     logging: *glog
   php:
-    image: php:7.4.30-fpm-alpine3.15
+    build:
+      context: ${PWD}/docker/php
+      dockerfile: ${PWD}/docker/php/Dockerfile
     user: ${CUSTOM_UID}:${CUSTOM_GID}
     volumes:
       - sock:/sock
-      - ${PWD}/docker/php/php-fpm.conf:/usr/local/etc/php-fpm.d/www.conf
-      - ${PWD}/docker/php/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
       - tmp:/tmp
       - wwwdata:/var/www/public
     env_file:
