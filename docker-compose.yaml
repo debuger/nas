@@ -36,7 +36,7 @@ services:
     depends_on:
       - xteve
     logging: &glog
-      driver: journald
+      driver: json-file
       options: 
         tag: "{{.ImageName}}/{{.Name}}"
         max-size: "10Mb"
@@ -216,6 +216,24 @@ services:
       - .env
     restart: unless-stopped
     logging: *glog
+  proftp:
+    build:
+      context: ${PWD}/docker/proftpd
+      dockerfile: ${PWD}/docker/proftpd/Dockerfile
+    container_name: proftp
+    environment:
+      - PROFTPDUSR=${PROFTPDUSR}
+      - PROFTPDGRP=${PROFTPDGRP}
+      - PASSIVE_PORT_MIN=${PASSIVE_PORT_MIN}
+      - PASSIVE_PORT_MAX=${PASSIVE_PORT_MAX}
+      - USER_GID=${CUSTOM_GID}
+      - PROFTPDHOST="ftp.${NGINX_HOST}"
+    volumes:
+      - downloads:/opt/ftp
+    ports:
+      - 20:20
+      - 21:21
+      - ${PASSIVE_PORT_MIN}-${PASSIVE_PORT_MAX}:${PASSIVE_PORT_MIN}-${PASSIVE_PORT_MAX}
 volumes:
   plexlibrary:
     driver_opts:
