@@ -129,7 +129,6 @@ services:
     environment:
       - PUID=${CUSTOM_UID}
       - PGID=${CUSTOM_GID}
-      - TZ=${TZ}
       - DOCKER_MODS=linuxserver/calibre-web:calibre
     volumes:
       - calibrelibrary:/config
@@ -145,10 +144,6 @@ services:
       dockerfile: ${PWD}/docker/mariadb/Dockerfile
     container_name: mariadb
     user: ${CUSTOM_UID}:${CUSTOM_GID}
-    environment:
-      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
-      - MARIADB_USER=${MARIADB_USER}
-      - MARIADB_PASSWORD=${MARIADB_PASSWORD}
     volumes:
       - mariadb:/var/lib/mysql
       - mariadbinit:/docker-entrypoint-initdb.d
@@ -200,7 +195,6 @@ services:
     environment:
       - PUID=${CUSTOM_UID}
       - PGID=${CUSTOM_GID}
-      - TZ=${TZ}
       - USER=${TRANS_USER}
       - PASS=${TRANS_PASSWORD}
       - TRANSMISSION_WEB_HOME=/kettu/
@@ -225,10 +219,6 @@ services:
         - PROFTPD_CTRL_PORT=${PROFTPD_CTRL_PORT}
     container_name: proftp
     environment:
-      - PROFTPDUSR=${PROFTPDUSR}
-      - PROFTPDGRP=${PROFTPDGRP}
-      - PASSIVE_PORT_MIN=${PASSIVE_PORT_MIN}
-      - PASSIVE_PORT_MAX=${PASSIVE_PORT_MAX}
       - USER_GID=${CUSTOM_GID}
       - PROFTPDHOST="ftp.${NGINX_HOST}"
     volumes:
