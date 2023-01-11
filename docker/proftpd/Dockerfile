@@ -1,13 +1,20 @@
 FROM alpine:3.16.3
 
+ARG PASSIVE_PORT_MIN \
+    PASSIVE_PORT_MAX \
+    PROFTPD_DATA_PORT \
+    PROFTPD_CTRL_PORT
+
 ENV PROFTPDUSR=${PROFTPDUSR:-proftpd} \
     PROFTPDGRP=${PROFTPDGRP:-proftpd} \
     PROFTPD_VERSION=${PROFTPD_VERSION:-1.3.8} \
     PROFTPDHOST=${PROFTPDHOST:-proftp} \
-    PASSIVE_PORT_MIN=${PASSIVE_PORT_MIN:-65000} \
-    PASSIVE_PORT_MAX=${PASSIVE_PORT_MAX:-65100} \
+    PASSIVE_PORT_MIN=${PASSIVE_PORT_MIN:?require!} \
+    PASSIVE_PORT_MAX=${PASSIVE_PORT_MAX:?require!} \
     USER_GID=${USER_GID:-100} \
-    USER_GROUP=${USER_GROUP:-users}
+    USER_GROUP=${USER_GROUP:-users} \
+    PROFTPD_DATA_PORT=${PROFTPD_DATA_PORT:?require!} \
+    PROFTPD_CTRL_PORT=${PROFTPD_CTRL_PORT:?require!}
 
 ENV PROFTPD_DEPS \
   g++ \
@@ -44,13 +51,13 @@ RUN addgroup ${PROFTPDGRP} && adduser -s /bin/sh -D -S -H ${PROFTPDUSR} ${PROFTP
 
 
 ADD proftpd.conf.template /etc/proftpd/proftpd.conf.template
-RUN envsubst < /etc/proftpd/proftpd.conf.template > /etc/proftpd/proftpd.conf && apk del .gettext
 ADD docker-entrypoint.sh /usr/local/sbin/docker-entrypoint.sh
 ADD userlist.csv /opt/userlist.csv
 
-EXPOSE 20 21 ${PASSIVE_PORT_MIN}-${PASSIVE_PORT_MAX}
+EXPOSE ${PROFTPD_DATA_PORT} ${PROFTPD_CTRL_PORT} ${PASSIVE_PORT_MIN}-${PASSIVE_PORT_MAX}
 
 ENTRYPOINT ["/usr/local/sbin/docker-entrypoint.sh"]
+
 VOLUME /opt/ftp/
 
 CMD ["proftpd", "--nodaemon", "-c", "/etc/proftpd/proftpd.conf"]

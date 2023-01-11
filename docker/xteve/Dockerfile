@@ -1,8 +1,11 @@
 FROM alpine:3.16.3
+
+ARG PORT
+
 RUN apk update && apk upgrade
 RUN apk add --no-cache curl ca-certificates bash busybox-suid su-exec tzdata ffmpeg vlc
 
-ENV PORT ${PORT:-34400}
+ENV PORT ${PORT:?require!}
 # Timezone (TZ)
 ENV TZ=${TZ:-UTC}
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone

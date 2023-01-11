@@ -2,7 +2,7 @@ version: "3.7"
 services:
   plex:
     build:
-      context: .
+      context: ${PWD}/docker/plex
       dockerfile: ${PWD}/docker/plex/Dockerfile
     container_name: plex
     environment:
@@ -42,7 +42,7 @@ services:
         max-size: "10Mb"
   www:
     build:
-      context: .
+      context: ${PWD}/docker/nginx
       dockerfile: ${PWD}/docker/nginx/Dockerfile
     ports:
       - 80:${NGINX_PORT}
@@ -98,9 +98,8 @@ services:
     logging: *glog
   nextcloud:
     build:
-      context: .
+      context: ${PWD}/docker/nextcloud
       dockerfile: ${PWD}/docker/nextcloud/Dockerfile
-    image: nextcloud:23.0.6-fpm-alpine
     user: ${CUSTOM_UID}:${CUSTOM_GID}
     environment:
       - MYSQL_DATABASE=nextcloud
@@ -161,10 +160,10 @@ services:
     build:
       context: ${PWD}/docker/hlsproxy
       dockerfile: ${PWD}/docker/hlsproxy/Dockerfile
+      args:
+        - PORT=${HLSPROXY_PORT}
     container_name: hlsproxy
     user: ${CUSTOM_UID}:${CUSTOM_GID}
-    environment:
-      - PORT=${HLSPROXY_PORT}
     volumes:
       - hlsproxycache:/data
       - ${PWD}/docker/hlsproxy/local.json:/opt/hlsp/local.json
@@ -178,11 +177,10 @@ services:
     build:
       context: ${PWD}/docker/xteve
       dockerfile: ${PWD}/docker/xteve/Dockerfile
+      args:
+        - PORT=${XTEVE_PORT}
     container_name: xteve
     user: ${CUSTOM_UID}:${CUSTOM_GID}
-    environment:
-      - PORT=${XTEVE_PORT}
-      - TZ=${TZ}
     volumes:
       - xtevedata:/xteve
       - ${PWD}/docker/xteve/settings.json:/xteve/settings.json
@@ -220,6 +218,11 @@ services:
     build:
       context: ${PWD}/docker/proftpd
       dockerfile: ${PWD}/docker/proftpd/Dockerfile
+      args:
+        - PASSIVE_PORT_MIN=${PASSIVE_PORT_MIN}
+        - PASSIVE_PORT_MAX=${PASSIVE_PORT_MAX}
+        - PROFTPD_DATA_PORT=${PROFTPD_DATA_PORT}
+        - PROFTPD_CTRL_PORT=${PROFTPD_CTRL_PORT}
     container_name: proftp
     environment:
       - PROFTPDUSR=${PROFTPDUSR}
@@ -231,9 +234,13 @@ services:
     volumes:
       - downloads:/opt/ftp
     ports:
-      - 20:20
-      - 21:21
+      - ${PROFTPD_DATA_PORT}:${PROFTPD_DATA_PORT}
+      - ${PROFTPD_CTRL_PORT}:${PROFTPD_CTRL_PORT}
       - ${PASSIVE_PORT_MIN}-${PASSIVE_PORT_MAX}:${PASSIVE_PORT_MIN}-${PASSIVE_PORT_MAX}
+    env_file:
+      - .env
+    restart: unless-stopped
+    logging: *glog
 volumes:
   plexlibrary:
     driver_opts:
