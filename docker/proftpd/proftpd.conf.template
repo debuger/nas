@@ -18,7 +18,7 @@ ServerType                      standalone
 #DefaultServer                  on
 
 # Port 21 is the standard FTP port.
-Port                            21
+Port                            ${PROFTPD_CTRL_PORT}
 
 # Don't use IPv6 support by default.
 UseIPv6                         on
