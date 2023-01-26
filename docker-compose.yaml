@@ -2,7 +2,7 @@ version: "3.7"
 services:
   plex:
     build:
-      context: .
+      context: ${PWD}/docker/plex
       dockerfile: ${PWD}/docker/plex/Dockerfile
     container_name: plex
     environment:
@@ -36,13 +36,13 @@ services:
     depends_on:
       - xteve
     logging: &glog
-      driver: journald
+      driver: json-file
       options: 
         tag: "{{.ImageName}}/{{.Name}}"
         max-size: "10Mb"
   www:
     build:
-      context: .
+      context: ${PWD}/docker/nginx
       dockerfile: ${PWD}/docker/nginx/Dockerfile
     ports:
       - 80:${NGINX_PORT}
@@ -84,12 +84,12 @@ services:
       /usr/local/bin/certbot certonly --webroot -v --webroot-path /var/www/certbot/ --config-dir /var/www/certbot/config --logs-dir /var/log/letsencrypt/ --work-dir /var/www/certbot/work -d ${NGINX_HOST}
     logging: *glog
   php:
-    image: php:7.4.30-fpm-alpine3.15
+    build:
+      context: ${PWD}/docker/php
+      dockerfile: ${PWD}/docker/php/Dockerfile
     user: ${CUSTOM_UID}:${CUSTOM_GID}
     volumes:
       - sock:/sock
-      - ${PWD}/docker/php/php-fpm.conf:/usr/local/etc/php-fpm.d/www.conf
-      - ${PWD}/docker/php/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
       - tmp:/tmp
       - wwwdata:/var/www/public
     env_file:
@@ -98,9 +98,8 @@ services:
     logging: *glog
   nextcloud:
     build:
-      context: .
+      context: ${PWD}/docker/nextcloud
       dockerfile: ${PWD}/docker/nextcloud/Dockerfile
-    image: nextcloud:23.0.6-fpm-alpine
     user: ${CUSTOM_UID}:${CUSTOM_GID}
     environment:
       - MYSQL_DATABASE=nextcloud
@@ -123,12 +122,13 @@ services:
     restart: unless-stopped
     logging: *glog
   calibre-web:
-    image: ghcr.io/linuxserver/calibre-web:version-0.6.19
+    build:
+      context: ${PWD}/docker/calibre
+      dockerfile: ${PWD}/docker/calibre/Dockerfile
     container_name: calibre-web
     environment:
       - PUID=${CUSTOM_UID}
       - PGID=${CUSTOM_GID}
-      - TZ=${TZ}
       - DOCKER_MODS=linuxserver/calibre-web:calibre
     volumes:
       - calibrelibrary:/config
@@ -139,13 +139,11 @@ services:
     restart: unless-stopped
     logging: *glog
   mariadb:
-    image: mariadb:10.7.4
+    build:
+      context: ${PWD}/docker/mariadb
+      dockerfile: ${PWD}/docker/mariadb/Dockerfile
     container_name: mariadb
     user: ${CUSTOM_UID}:${CUSTOM_GID}
-    environment:
-      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
-      - MARIADB_USER=${MARIADB_USER}
-      - MARIADB_PASSWORD=${MARIADB_PASSWORD}
     volumes:
       - mariadb:/var/lib/mysql
       - mariadbinit:/docker-entrypoint-initdb.d
@@ -157,10 +155,10 @@ services:
     build:
       context: ${PWD}/docker/hlsproxy
       dockerfile: ${PWD}/docker/hlsproxy/Dockerfile
+      args:
+        - PORT=${HLSPROXY_PORT}
     container_name: hlsproxy
     user: ${CUSTOM_UID}:${CUSTOM_GID}
-    environment:
-      - PORT=${HLSPROXY_PORT}
     volumes:
       - hlsproxycache:/data
       - ${PWD}/docker/hlsproxy/local.json:/opt/hlsp/local.json
@@ -174,11 +172,10 @@ services:
     build:
       context: ${PWD}/docker/xteve
       dockerfile: ${PWD}/docker/xteve/Dockerfile
+      args:
+        - PORT=${XTEVE_PORT}
     container_name: xteve
     user: ${CUSTOM_UID}:${CUSTOM_GID}
-    environment:
-      - PORT=${XTEVE_PORT}
-      - TZ=${TZ}
     volumes:
       - xtevedata:/xteve
       - ${PWD}/docker/xteve/settings.json:/xteve/settings.json
@@ -191,12 +188,13 @@ services:
     restart: unless-stopped
     logging: *glog
   transmissionbt:
-    image: lscr.io/linuxserver/transmission:version-3.00-r6
+    build:
+      context: ${PWD}/docker/transmission
+      dockerfile: ${PWD}/docker/transmission/Dockerfile
     container_name: transmission
     environment:
       - PUID=${CUSTOM_UID}
       - PGID=${CUSTOM_GID}
-      - TZ=${TZ}
       - USER=${TRANS_USER}
       - PASS=${TRANS_PASSWORD}
       - TRANSMISSION_WEB_HOME=/kettu/
@@ -206,6 +204,31 @@ services:
     ports:
       - 51413:51413/tcp
       - 51413:51413/udp
+    env_file:
+      - .env
+    restart: unless-stopped
+    logging: *glog
+  proftp:
+    build:
+      context: ${PWD}/docker/proftpd
+      dockerfile: ${PWD}/docker/proftpd/Dockerfile
+      args:
+        - PASSIVE_PORT_MIN=${PASSIVE_PORT_MIN}
+        - PASSIVE_PORT_MAX=${PASSIVE_PORT_MAX}
+        - PROFTPD_DATA_PORT=${PROFTPD_DATA_PORT}
+        - PROFTPD_CTRL_PORT=${PROFTPD_CTRL_PORT}
+    container_name: proftp
+    environment:
+      - USER_GID=${CUSTOM_GID}
+      - PROFTPDHOST="ftp.${NGINX_HOST}"
+    volumes:
+      - downloads:/opt/ftp
+      - ftpuser1:/home/user1
+      - ftpuser2:/home/user2
+    ports:
+      - ${PROFTPD_DATA_PORT}:${PROFTPD_DATA_PORT}
+      - ${PROFTPD_CTRL_PORT}:${PROFTPD_CTRL_PORT}
+      - ${PASSIVE_PORT_MIN}-${PASSIVE_PORT_MAX}:${PASSIVE_PORT_MIN}-${PASSIVE_PORT_MAX}
     env_file:
       - .env
     restart: unless-stopped
@@ -337,3 +360,15 @@ volumes:
       type: bind
       o: bind
       device: "${PWD}/system/xteve"
+  ftpuser1: 
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/fs/ftp/user1"
+  ftpuser2: 
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/fs/ftp/user2"

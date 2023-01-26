@@ -19,7 +19,8 @@ docker-compose run --rm  certbot certonly --webroot -v --webroot-path /var/www/c
 and update configs after result [see source](https://mindsers.blog/post/https-using-nginx-certbot-docker/)
 
 Extra for KODI on host machine
-`/usr/lib/systemd/system/kodi.service`
+-----
+Check service `/usr/lib/systemd/system/kodi.service`
 
 
 ```
@@ -43,7 +44,7 @@ WantedBy = multi-user.target
 
 ```
 
-`/etc/permissions.local`
+Check permissions `/etc/permissions.local`
 
 ```
 /usr/bin/Xorg root:root 0755
@@ -58,5 +59,4 @@ Docker images used:
 * [calibre-web](https://hub.docker.com/r/linuxserver/calibre-web)
 * [mariadb](https://hub.docker.com/_/mariadb)
 * [transmission](https://hub.docker.com/r/linuxserver/transmission)
-* [alpine v3.15.4](https://hub.docker.com/_/alpine)
-
+* [alpine v3.16.3](https://hub.docker.com/_/alpine)

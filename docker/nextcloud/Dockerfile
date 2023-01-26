@@ -1,1 +1,1 @@
-FROM nextcloud:23.0.9-fpm-alpine
+FROM nextcloud:23.0.12-fpm-alpine
