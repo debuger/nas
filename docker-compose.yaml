@@ -223,6 +223,8 @@ services:
       - PROFTPDHOST="ftp.${NGINX_HOST}"
     volumes:
       - downloads:/opt/ftp
+      - ftpuser1:/home/user1
+      - ftpuser2:/home/user2
     ports:
       - ${PROFTPD_DATA_PORT}:${PROFTPD_DATA_PORT}
       - ${PROFTPD_CTRL_PORT}:${PROFTPD_CTRL_PORT}
