@@ -1,1 +1,1 @@
-FROM lscr.io/linuxserver/transmission:version-3.00-r6
+FROM lscr.io/linuxserver/transmission:version-3.00-r8
