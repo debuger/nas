@@ -12,17 +12,17 @@ Some ideas was used from [notes' series on habr](https://habr.com/ru/post/548640
 
 Services inclueded
 ----
-* [plex] (https://plex.tv/)
-* [nginx] (https://nginx.org/)
-* [certbot] (https://certbot.eff.org/)
-* [php] (https://www.php.net/)
-* [nextcloud] (https://nextcloud.com/)
-* [calibre] (https://calibre-ebook.com/)
-* [mariadb] (https://mariadb.org/)
-* [hlsproxy] (https://www.hls-proxy.com/)
-* [xteve] (https://github.com/xteve-project/xTeVe)
-* [transmission] (https://transmissionbt.com/)
-* [proftp] (http://www.proftpd.org/)
+* [plex](https://plex.tv/)
+* [nginx](https://nginx.org/)
+* [certbot](https://certbot.eff.org/)
+* [php](https://www.php.net/)
+* [nextcloud](https://nextcloud.com/)
+* [calibre](https://calibre-ebook.com/)
+* [mariadb](https://mariadb.org/)
+* [hlsproxy](https://www.hls-proxy.com/)
+* [xteve](https://github.com/xteve-project/xTeVe)
+* [transmission](https://transmissionbt.com/)
+* [proftp](http://www.proftpd.org/)
 
 
 
