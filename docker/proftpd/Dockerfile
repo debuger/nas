@@ -46,7 +46,7 @@ RUN set -x \
 
 RUN echo "/sbin/nologin" >> /etc/shells
 RUN addgroup ${PROFTPDGRP} && adduser -s /bin/sh -D -S -H ${PROFTPDUSR} ${PROFTPDGRP} \
-    && mkdir /run/proftpd/ && chown -R ${PROFTPDUSR}:${PROFTPDGRP} /run/proftpd/ \
+    && mkdir /etc/proftpd/modules.d/ && mkdir /run/proftpd/ && chown -R ${PROFTPDUSR}:${PROFTPDGRP} /run/proftpd/ \
     && mkdir /opt/ftp/ && chown -R ${PROFTPDUSR}:${PROFTPDGRP} /opt/ftp/
 
 
