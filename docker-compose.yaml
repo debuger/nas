@@ -198,7 +198,6 @@ services:
       - PGID=${CUSTOM_GID}
       - USER=${TRANS_USER}
       - PASS=${TRANS_PASSWORD}
-      - TRANSMISSION_WEB_HOME=/kettu/
     volumes:
       - transmissiondata:/config
       - downloads:/downloads
