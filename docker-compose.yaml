@@ -16,6 +16,7 @@ services:
       - music:/music
       - downloadsmusic:/music/downloads
       - downloadsvideo:/movies/downloads
+      - plextranscode:/transcode
     restart: unless-stopped
     ports:
       - "32400:32400"
@@ -239,6 +240,11 @@ volumes:
       type: bind
       o: bind
       device: "${PWD}/system/plexlibrary"
+  plextranscode:
+    driver_opts:
+      type: bind
+      o: bind
+      device: /tmp/plextranscode
   calibrelibrary:
     driver_opts:
       type: bind
