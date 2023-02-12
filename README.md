@@ -10,6 +10,9 @@ Should be mentioned
 ----
 Some ideas was used from [notes' series on habr](https://habr.com/ru/post/548640/) [and one more article](https://habr.com/ru/company/timeweb/blog/645155/)
 
+!!!
+Configure plex transcoder to use folder `/transcode` as temporary.
+
 Services inclueded
 ----
 * [plex](https://plex.tv/)
