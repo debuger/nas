@@ -1,6 +1,6 @@
 server {
-    listen ${NGINX_PORT};
-    listen [::]:${NGINX_PORT};
+    listen ${NGINX_SSL_PORT};
+    listen [::]:${NGINX_SSL_PORT};
     error_log  /log/nginx/calibre.log warn;
     access_log /log/nginx/calibre.log;
     server_name calibre.${NGINX_HOST};

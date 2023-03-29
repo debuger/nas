@@ -1,8 +1,10 @@
 server {
-    listen ${NGINX_PORT};
-    listen [::]:${NGINX_PORT};
+    listen ${NGINX_SSL_PORT} ssl http2;
+    listen [::]:${NGINX_PORT} ssl http2;
     error_log  /log/nginx/nextcloud.log error;
     access_log /log/nginx/nextcloud.log;
+    include "./gzip.conf";
+    include "./ssl.conf";
     server_name nextcloud.${NGINX_HOST};
     client_max_body_size 512M;
     fastcgi_buffers 64 4K;

@@ -1,27 +1,24 @@
-#server {
-#   listen ${NGINX_PORT};
-#   listen [::]:${NGINX_PORT};
-#   location /.well-known/acme-challenge/ {
-#       root /var/www/certbot;
-#   }
-#
-#   root /var/www/html;
-#   index index.html index.htm;
-#   return 301 https://$host$request_uri;
-#   server_name ${NGINX_HOST};
-#}
+server {
+   listen ${NGINX_PORT};
+   listen [::]:${NGINX_PORT};
+   location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+   }
+   location / {
+        return 301 https://$host$request_uri;
+    }
+   server_name "_";
+}
 
 server {
-    listen ${NGINX_PORT};
-    listen [::]:${NGINX_PORT};
+    listen ${NGINX_SSL_PORT} ssl http2;
+    listen [::]:${NGINX_SSL_PORT} ssl http2;
     index index.php index.html;
     server_name *.${NGINX_HOST};
     error_log  /log/nginx/error.log;
     access_log /log/nginx/access.log;
-    gzip_static on;
-    gzip on;
-    gunzip on;
-    gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript text/json;
+    include "./gzip.conf";
+    include "./ssl.conf";
     root /var/www/public;
     location / {
         return 404;
