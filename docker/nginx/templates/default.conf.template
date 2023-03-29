@@ -17,8 +17,8 @@ server {
     server_name *.${NGINX_HOST};
     error_log  /log/nginx/error.log;
     access_log /log/nginx/access.log;
-    include "./gzip.conf";
-    include "./ssl.conf";
+    include "conf.d/gzip.conf";
+    include "conf.d/ssl.conf";
     root /var/www/public;
     location / {
         return 404;

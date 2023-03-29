@@ -1,8 +1,8 @@
 server {
     listen ${NGINX_SSL_PORT} ssl http2;
     listen [::]:${NGINX_SSL_PORT} ssl http2;
-    include "./gzip.conf";
-    include "./ssl.conf";
+    include "conf.d/gzip.conf";
+    include "conf.d/ssl.conf";
     error_log  /log/nginx/xteve.log warn;
     access_log /log/nginx/xteve.log;
     server_name xteve.${NGINX_HOST};
