@@ -243,7 +243,7 @@ volumes:
     driver_opts:
       type: bind
       o: bind
-      device: /tmp/plextranscode
+      device: "${PWD}/system/plextranscode"
   calibrelibrary:
     driver_opts:
       type: bind
