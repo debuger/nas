@@ -21,7 +21,6 @@ services:
     ports:
       - "32400:32400"
       - "1900:1900/udp"
-      - "5353:5353/udp"
       - "3005:3005"
       - "8324:8324"
       - "32410:32410/udp"
@@ -83,7 +82,7 @@ services:
       - .env
     restart: "no"
     entrypoint:
-      /usr/local/bin/certbot certonly --webroot -v --webroot-path /var/www/certbot/ --config-dir /var/www/certbot/config --logs-dir /var/log/letsencrypt/ --work-dir /var/www/certbot/work -d ${NGINX_HOST}
+      /usr/local/bin/certbot certonly --webroot -v --webroot-path /var/www/certbot/ --config-dir /var/www/certbot/config --logs-dir /var/log/letsencrypt/ --work-dir /var/www/certbot/work -d "${NGINX_HOST}"
     logging: *glog
   php:
     build:
@@ -244,7 +243,7 @@ volumes:
     driver_opts:
       type: bind
       o: bind
-      device: /tmp/plextranscode
+      device: "${PWD}/system/plextranscode"
   calibrelibrary:
     driver_opts:
       type: bind
