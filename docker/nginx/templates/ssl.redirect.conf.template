@@ -1,0 +1,8 @@
+listen ${NGINX_PORT};
+listen [::]:${NGINX_PORT};
+location /.well-known/acme-challenge/ {
+   root /var/www/certbot;
+}
+location / {
+   return 301 https://$host$request_uri;
+}
