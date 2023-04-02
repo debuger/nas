@@ -1,8 +1,8 @@
 #catch incorrect host
 server {
-   listen ${NGINX_PORT};
-   listen [::]:${NGINX_PORT};
-   server_name "_";
+   listen ${NGINX_PORT} default_server;
+   listen [::]:${NGINX_PORT} default_server;
+   server_name "";
    return 301 http://${NGINX_HOST};
 }
 
@@ -49,8 +49,8 @@ server {
 
 #default site
 server {
-    listen ${NGINX_SSL_PORT} ssl http2;
-    listen [::]:${NGINX_SSL_PORT} ssl http2;
+    listen ${NGINX_SSL_PORT} ssl http2 default_server;
+    listen [::]:${NGINX_SSL_PORT} ssl http2 default_server;
     index index.php index.html;
     server_name ${NGINX_HOST};
     error_log  /log/nginx/error.log;
