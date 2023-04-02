@@ -1,16 +1,18 @@
-#server {
-#   listen ${NGINX_PORT};
-#   listen [::]:${NGINX_PORT};
-#   location /.well-known/acme-challenge/ {
-#       root /var/www/certbot;
-#   }
-#
-#   root /var/www/html;
-#   index index.html index.htm;
-#   return 301 https://$host$request_uri;
-#   server_name ${NGINX_HOST};
-#}
+#catch incorrect host
+server {
+   listen ${NGINX_PORT};
+   listen [::]:${NGINX_PORT};
+   server_name "_";
+   return 301 http://${NGINX_HOST};
+}
 
+#catch certbot & redirect ssl
+server {
+   server_name ${NGINX_HOST};
+   include "conf.d/ssl.redirect.conf";
+}
+
+#handle incorrect subdomains & certbot
 server {
     listen ${NGINX_PORT};
     listen [::]:${NGINX_PORT};
@@ -18,11 +20,13 @@ server {
     server_name *.${NGINX_HOST};
     error_log  /log/nginx/error.log;
     access_log /log/nginx/access.log;
-    gzip_static on;
-    gzip on;
-    gunzip on;
-    gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript text/json;
+    include "conf.d/gzip.conf";
     root /var/www/public;
+    #certbot
+    location /.well-known/acme-challenge/ {
+       root /var/www/certbot;
+    }
+
     location / {
         return 404;
     }
@@ -43,18 +47,23 @@ server {
     }
 }
 
+#default site
 server {
-    listen ${NGINX_PORT};
-    listen [::]:${NGINX_PORT};
+    listen ${NGINX_SSL_PORT} ssl http2;
+    listen [::]:${NGINX_SSL_PORT} ssl http2;
     index index.php index.html;
     server_name ${NGINX_HOST};
     error_log  /log/nginx/error.log;
     access_log /log/nginx/access.log;
-    gzip_static on;
-    gzip on;
-    gunzip on;
-    gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript text/json;
     root /var/www/public;
+    
+    include "conf.d/gzip.conf";
+
+    include "conf.d/ssl.conf";
+    ssl_certificate /var/www/certbot/config/live/${NGINX_HOST}/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /var/www/certbot/config/live/${NGINX_HOST}/privkey.pem; # managed by Certbot
+    ssl_trusted_certificate /var/www/certbot/config/live/${NGINX_HOST}/chain.pem;
+
     location ~ \.php$ {
         try_files $uri =404;
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
@@ -63,9 +72,6 @@ server {
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_param PATH_INFO $fastcgi_path_info;
-    }
-    location /.well-known/acme-challenge/ {
-       root /var/www/certbot;
     }
 
     error_page 404 /errors/404.html;
