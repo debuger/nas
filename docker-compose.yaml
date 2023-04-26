@@ -10,6 +10,7 @@ services:
       - PGID=${CUSTOM_GID}
       - VERSION=docker
       - PLEX_CLAIM=${PLEX_API_KEY}
+      - TZ=${TZ}
     volumes:
       - plexlibrary:/config
       - movies:/movies
@@ -45,6 +46,7 @@ services:
     build:
       context: ${PWD}/docker/nginx
       dockerfile: ${PWD}/docker/nginx/Dockerfile
+    container_name: www
     ports:
       - 80:${NGINX_PORT}
       - 443:${NGINX_SSL_PORT}
@@ -233,6 +235,24 @@ services:
       - .env
     restart: unless-stopped
     logging: *glog
+  homeassistant:
+    build:
+      context: ${PWD}/docker/homeassistant
+      dockerfile: ${PWD}/docker/homeassistant/Dockerfile
+    container_name: homeassistant
+    environment:
+      - TZ=${TZ}
+      - PUID=${CUSTOM_UID}
+      - PGID=${CUSTOM_GID}
+    volumes:
+      - homeassistantconfig:/config
+      - /etc/localtime:/etc/localtime:ro
+    privileged: true
+    user: ${CUSTOM_UID}:${CUSTOM_GID}
+    env_file:
+      - .env
+    restart: unless-stopped
+    logging: *glog
 volumes:
   plexlibrary:
     driver_opts:
@@ -377,3 +397,9 @@ volumes:
       type: bind
       o: bind
       device: "${PWD}/fs/ftp/user2"
+  homeassistantconfig:
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/system/homeassistant"
