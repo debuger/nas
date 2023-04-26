@@ -13,6 +13,10 @@ Some ideas was used from [notes' series on habr](https://habr.com/ru/post/548640
 !!!
 Configure plex transcoder to use folder `/transcode` as temporary.
 
+!!!
+Need to confirure HA to accept reverse proxy. [link](https://www.home-assistant.io/integrations/http) [link](https://community.home-assistant.io/t/reverse-proxy-using-nginx/196954)
+with trusted IP of runing docker network
+
 Services inclueded
 ----
 * [plex](https://plex.tv/)
@@ -26,6 +30,7 @@ Services inclueded
 * [xteve](https://github.com/xteve-project/xTeVe)
 * [transmission](https://transmissionbt.com/)
 * [proftp](http://www.proftpd.org/)
+* [home assistant](https://home-assistant.io)
 
 
 
@@ -78,4 +83,5 @@ Docker images used:
 * [calibre-web](https://hub.docker.com/r/linuxserver/calibre-web)
 * [mariadb](https://hub.docker.com/_/mariadb)
 * [transmission](https://hub.docker.com/r/linuxserver/transmission)
+* [home assistant](https://hub.docker.com/r/homeassistant/home-assistant)
 * [alpine v3.16.3](https://hub.docker.com/_/alpine)
