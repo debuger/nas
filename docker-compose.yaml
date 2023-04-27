@@ -132,7 +132,8 @@ services:
     environment:
       - PUID=${CUSTOM_UID}
       - PGID=${CUSTOM_GID}
-      - DOCKER_MODS=linuxserver/calibre-web:calibre
+      - DOCKER_MODS=linuxserver/mods:universal-calibre
+      - TZ=${TZ}
     volumes:
       - calibrelibrary:/config
       - books:/books
