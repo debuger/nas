@@ -8,6 +8,7 @@ ARG PASSIVE_PORT_MIN \
 ENV PROFTPDUSR=${PROFTPDUSR:-proftpd} \
     PROFTPDGRP=${PROFTPDGRP:-proftpd} \
     PROFTPD_VERSION=${PROFTPD_VERSION:-1.3.8} \
+    PROFTPD_PASSWD_FILE=/etc/proftpd/passwd \
     PROFTPDHOST=${PROFTPDHOST:-proftp} \
     PASSIVE_PORT_MIN=${PASSIVE_PORT_MIN:?require!} \
     PASSIVE_PORT_MAX=${PASSIVE_PORT_MAX:?require!} \
@@ -27,6 +28,7 @@ RUN set -x \
         ca-certificates \
         curl \
         file \
+        perl \
     && apk add --no-cache --virtual .build-deps \
         $PROFTPD_DEPS \
     && apk add --no-cache --virtual .gettext gettext \
@@ -46,7 +48,7 @@ RUN set -x \
 
 RUN echo "/sbin/nologin" >> /etc/shells
 RUN addgroup ${PROFTPDGRP} && adduser -s /bin/sh -D -S -H ${PROFTPDUSR} ${PROFTPDGRP} \
-    && mkdir -p /etc/proftpd/modules.d/ && mkdir /run/proftpd/ && chown -R ${PROFTPDUSR}:${PROFTPDGRP} /run/proftpd/ \
+    && mkdir -p /etc/proftpd/modules.d/ && touch ${PROFTPD_PASSWD_FILE} && mkdir /run/proftpd/ && chown -R ${PROFTPDUSR}:${PROFTPDGRP} /run/proftpd/ \
     && mkdir /opt/ftp/ && chown -R ${PROFTPDUSR}:${PROFTPDGRP} /opt/ftp/
 
 

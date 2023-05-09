@@ -223,11 +223,11 @@ services:
     container_name: proftp
     environment:
       - USER_GID=${CUSTOM_GID}
+      - USER_UID=${CUSTOM_UID}
       - PROFTPDHOST="ftp.${NGINX_HOST}"
     volumes:
       - downloads:/opt/ftp
-      - ftpuser1:/home/user1
-      - ftpuser2:/home/user2
+      - ftpdata:/home/
     ports:
       - ${PROFTPD_DATA_PORT}:${PROFTPD_DATA_PORT}
       - ${PROFTPD_CTRL_PORT}:${PROFTPD_CTRL_PORT}
@@ -386,18 +386,12 @@ volumes:
       type: bind
       o: bind
       device: "${PWD}/system/xteve"
-  ftpuser1: 
+  ftpdata: 
     driver: local
     driver_opts:
       type: bind
       o: bind
-      device: "${PWD}/fs/ftp/user1"
-  ftpuser2: 
-    driver: local
-    driver_opts:
-      type: bind
-      o: bind
-      device: "${PWD}/fs/ftp/user2"
+      device: "${PWD}/fs/ftp"
   homeassistantconfig:
     driver: local
     driver_opts:
