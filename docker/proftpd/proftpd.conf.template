@@ -43,6 +43,8 @@ Group                           ${PROFTPDGRP}
 # directory, uncomment this line.
 DefaultRoot ~ 
 
+AuthUserFile ${PROFTPD_PASSWD_FILE}
+
 # Normally, we want files to be overwriteable.
 AllowOverwrite                  on
 
@@ -50,7 +52,7 @@ AllowOverwrite                  on
 DefaultServer                   on
 ShowSymlinks                    on
 DefaultAddress                  127.0.0.1
-RequireValidShell               no
+RequireValidShell               off
 
 TimeoutNoTransfer               600
 TimeoutStalled                  600
