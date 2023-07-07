@@ -1,1 +1,1 @@
-FROM lscr.io/linuxserver/plex:1.30.2
+FROM lscr.io/linuxserver/plex:1.32.4
