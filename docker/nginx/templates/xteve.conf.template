@@ -15,3 +15,12 @@ server {
         proxy_set_header Host $host;
     }
 }
+
+server {
+    listen ${NGINX_SSL_PORT};
+    listen [::]:${NGINX_SSL_PORT};
+    error_log  /log/nginx/xteve.log warn;
+    access_log /log/nginx/xteve.log;
+    server_name xteve.${NGINX_HOST};
+    return 301 http://xteve.${NGINX_HOST};
+}

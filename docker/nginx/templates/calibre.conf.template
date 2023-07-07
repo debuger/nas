@@ -1,9 +1,4 @@
 server {
-   server_name calibre.${NGINX_HOST};
-   include "conf.d/include/ssl.redirect.conf";
-}
-
-server {
     listen ${NGINX_SSL_PORT};
     listen [::]:${NGINX_SSL_PORT};
     error_log  /log/nginx/calibre.log warn;

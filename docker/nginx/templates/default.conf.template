@@ -19,15 +19,8 @@ server {
     error_log  /log/nginx/error.log;
     access_log /log/nginx/access.log;
     include "conf.d/include/gzip.conf";
+    include "conf.d/include/ssl.redirect.conf";
     root /var/www/public;
-    listen ${NGINX_PORT};
-    listen [::]:${NGINX_PORT};
-    location /.well-known/acme-challenge/ {
-       root /var/www/certbot;
-    }
-    location / {
-       return 301 https://${NGINX_HOST}$request_uri;
-    }
 }
 
 #default site
