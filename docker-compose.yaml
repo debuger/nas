@@ -84,7 +84,7 @@ services:
       - .env
     restart: "no"
     entrypoint:
-      /usr/local/bin/certbot certonly --webroot -v --webroot-path /var/www/certbot/ --config-dir /var/www/certbot/config --logs-dir /var/log/letsencrypt/ --work-dir /var/www/certbot/work -d "${NGINX_HOST}" -d "calibre.${NGINX_HOST}" "transmission.${NGINX_HOST}" "nextcloud.${NGINX_HOST}"
+      /usr/local/bin/certbot certonly -n --webroot -v --webroot-path /var/www/certbot/ --config-dir /var/www/certbot/config --logs-dir /var/log/letsencrypt/ --work-dir /var/www/certbot/work -d "${NGINX_HOST}" -d "calibre.${NGINX_HOST}" "transmission.${NGINX_HOST}" "nextcloud.${NGINX_HOST}"
     logging: *glog
   php:
     build:
