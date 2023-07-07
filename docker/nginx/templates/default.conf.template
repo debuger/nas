@@ -1,60 +1,45 @@
-#server {
-#   listen ${NGINX_PORT};
-#   listen [::]:${NGINX_PORT};
-#   location /.well-known/acme-challenge/ {
-#       root /var/www/certbot;
-#   }
-#
-#   root /var/www/html;
-#   index index.html index.htm;
-#   return 301 https://$host$request_uri;
-#   server_name ${NGINX_HOST};
-#}
-
+#catch incorrect host
 server {
-    listen ${NGINX_PORT};
-    listen [::]:${NGINX_PORT};
+   listen ${NGINX_PORT} default_server;
+   listen [::]:${NGINX_PORT} default_server;
+   server_name "_";
+   return 301 http://${NGINX_HOST};
+}
+
+#catch certbot & redirect ssl
+server {
+   server_name ${NGINX_HOST};
+   include "conf.d/include/ssl.redirect.conf";
+}
+
+#handle incorrect subdomains & certbot
+server {
     index index.php index.html;
     server_name *.${NGINX_HOST};
     error_log  /log/nginx/error.log;
     access_log /log/nginx/access.log;
-    gzip_static on;
-    gzip on;
-    gunzip on;
-    gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript text/json;
+    include "conf.d/include/gzip.conf";
+    include "conf.d/include/ssl.redirect.conf";
     root /var/www/public;
-    location / {
-        return 404;
-    }
-
-    error_page 404 /errors/404.html;
-
-    location = /errors/404.html
-    {
-        root /var/www/public;
-        internal;
-    }
-    
-    error_page 500 502 503 504 /errors/50x.html;
-    location = /errors/50x.html
-    {
-        root /var/www/public;
-        internal;
-    }
 }
 
+#default site
 server {
-    listen ${NGINX_PORT};
-    listen [::]:${NGINX_PORT};
+    listen ${NGINX_SSL_PORT} ssl http2 default_server;
+    listen [::]:${NGINX_SSL_PORT} ssl http2 default_server;
     index index.php index.html;
-    server_name ${NGINX_HOST};
+    server_name *.${NGINX_HOST};
     error_log  /log/nginx/error.log;
     access_log /log/nginx/access.log;
-    gzip_static on;
-    gzip on;
-    gunzip on;
-    gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript text/json;
     root /var/www/public;
+    
+    include "conf.d/include/gzip.conf";
+
+    include "conf.d/include/ssl.conf";
+    ssl_certificate /var/www/certbot/config/live/${NGINX_HOST}/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /var/www/certbot/config/live/${NGINX_HOST}/privkey.pem; # managed by Certbot
+    ssl_trusted_certificate /var/www/certbot/config/live/${NGINX_HOST}/chain.pem;
+
     location ~ \.php$ {
         try_files $uri =404;
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
@@ -63,9 +48,6 @@ server {
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_param PATH_INFO $fastcgi_path_info;
-    }
-    location /.well-known/acme-challenge/ {
-       root /var/www/certbot;
     }
 
     error_page 404 /errors/404.html;

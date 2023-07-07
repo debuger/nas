@@ -14,3 +14,12 @@ server {
         proxy_pass http://hlsproxy:8085;
     }   
 }
+
+server {
+    listen ${NGINX_SSL_PORT};
+    listen [::]:${NGINX_SSL_PORT};
+    error_log  /log/nginx/hlsproxy.log warn;
+    access_log /log/nginx/hlsproxy.log;
+    server_name hlsproxy.${NGINX_HOST};
+    return 301 http://hlsproxy.${NGINX_HOST};
+}
