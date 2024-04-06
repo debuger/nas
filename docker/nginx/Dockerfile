@@ -1,4 +1,4 @@
-FROM nginx:1.22.1-alpine
+FROM nginx:1.25.4-alpine3.18
 
 ENV C_UID ${CUSTOM_UID:-1}
 ENV C_GID ${CUSTOM_GID:-1}
