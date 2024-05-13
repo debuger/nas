@@ -84,4 +84,5 @@ Docker images used:
 * [mariadb](https://hub.docker.com/_/mariadb)
 * [transmission](https://hub.docker.com/r/linuxserver/transmission)
 * [home assistant](https://hub.docker.com/r/homeassistant/home-assistant)
+* [certbot](https://hub.docker.com/r/certbot/certbot)
 * [alpine v3.19](https://hub.docker.com/_/alpine)
