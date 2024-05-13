@@ -41,7 +41,8 @@ services:
       driver: json-file
       options: 
         tag: "{{.ImageName}}/{{.Name}}"
-        max-size: "10Mb"
+        max-size: "5m"
+        max-file: "3"
   www:
     build:
       context: ${PWD}/docker/nginx
