@@ -255,6 +255,25 @@ services:
       - .env
     restart: unless-stopped
     logging: *glog
+  torrserver:
+    build:
+      context: ${PWD}/docker/torrserver
+      dockerfile: ${PWD}/docker/torrserver/Dockerfile
+    container_name: torrserver
+    user: ${CUSTOM_UID}:${CUSTOM_GID}
+    environment:
+      - TZ=${TZ}
+      - PUID=${CUSTOM_UID}
+      - PGID=${CUSTOM_GID}
+      - TS_PORT=${TS_PORT}
+    volumes:
+      - torrserver:/opt
+    devices:
+      - /dev/dri:/dev/dri
+    env_file:
+      - .env
+    restart: unless-stopped
+    logging: *glog
 volumes:
   plexlibrary:
     driver_opts:
@@ -387,12 +406,24 @@ volumes:
       type: bind
       o: bind
       device: "${PWD}/system/xteve"
-  ftpdata: 
+  torrserver:
     driver: local
     driver_opts:
       type: bind
       o: bind
-      device: "${PWD}/fs/ftp"
+      device: "${PWD}/system/torrserver"
+  ftpuser1: 
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/fs/ftp/user1"
+  ftpuser2: 
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/fs/ftp/user2"
   homeassistantconfig:
     driver: local
     driver_opts:
