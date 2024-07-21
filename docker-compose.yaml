@@ -237,6 +237,23 @@ services:
       - .env
     restart: unless-stopped
     logging: *glog
+  filebrowser:
+    container_name: filebrowser
+    build:
+      context: ${PWD}/docker/filebrowser
+      dockerfile: ${PWD}/docker/filebrowser/Dockerfile
+    user: ${CUSTOM_UID}:${CUSTOM_GID}
+    environment:
+      - USER_GID=${CUSTOM_GID}
+      - USER_UID=${CUSTOM_UID}
+      - FILEBROWSERHOST="fb.${NGINX_HOST}"
+    volumes:
+      - fbdata:/srv
+      - ${PWD}/system/filebrowser/:/database/
+    env_file:
+      - .env
+    restart: unless-stopped
+    logging: *glog
   homeassistant:
     build:
       context: ${PWD}/docker/homeassistant
@@ -399,3 +416,8 @@ volumes:
       type: bind
       o: bind
       device: "${PWD}/system/homeassistant"
+  fbdata:
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/fs/downloads"
