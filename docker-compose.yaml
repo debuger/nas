@@ -73,6 +73,7 @@ services:
        - hlsproxy
        - xteve
        - transmissionbt
+       - komga
     logging: *glog
   certbot:
     image: certbot/certbot:v2.9.0
@@ -255,6 +256,22 @@ services:
       - .env
     restart: unless-stopped
     logging: *glog
+  komga:
+    image: ${PWD}/docker/komga
+    dockerfile: ${PWD}/docker/komga/Dockerfile
+    container_name: komga
+    volumes:
+      - komga:/config
+      - comics:/data
+    ports:
+      - 25600:25600
+    user: ${CUSTOM_UID}:${CUSTOM_GID}
+    environment:
+      - TZ=${TZ}
+    env_file:
+      - .env
+    restart: unless-stopped
+    logging: *glog
 volumes:
   plexlibrary:
     driver_opts:
@@ -399,3 +416,15 @@ volumes:
       type: bind
       o: bind
       device: "${PWD}/system/homeassistant"
+  komga: 
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/system/comga"
+  comics: 
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/fs/comics"

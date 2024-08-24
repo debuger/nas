@@ -31,6 +31,7 @@ Services inclueded
 * [transmission](https://transmissionbt.com/)
 * [proftp](http://www.proftpd.org/)
 * [home assistant](https://home-assistant.io)
+* [komga](https://komga.org/)
 
 
 
@@ -85,4 +86,5 @@ Docker images used:
 * [transmission](https://hub.docker.com/r/linuxserver/transmission)
 * [home assistant](https://hub.docker.com/r/homeassistant/home-assistant)
 * [certbot](https://hub.docker.com/r/certbot/certbot)
+* [komga](https://hub.docker.com/r/gotson/komga)
 * [alpine v3.19](https://hub.docker.com/_/alpine)
