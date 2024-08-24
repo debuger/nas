@@ -257,8 +257,9 @@ services:
     restart: unless-stopped
     logging: *glog
   komga:
-    image: ${PWD}/docker/komga
-    dockerfile: ${PWD}/docker/komga/Dockerfile
+    build:
+      context:  ${PWD}/docker/komga
+      dockerfile: ${PWD}/docker/komga/Dockerfile 
     container_name: komga
     volumes:
       - komga:/config
