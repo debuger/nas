@@ -1,4 +1,4 @@
-FROM alpine:3.19.1
+FROM alpine:3.20.2
 
 ARG PASSIVE_PORT_MIN \
     PASSIVE_PORT_MAX \

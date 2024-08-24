@@ -87,4 +87,4 @@ Docker images used:
 * [home assistant](https://hub.docker.com/r/homeassistant/home-assistant)
 * [certbot](https://hub.docker.com/r/certbot/certbot)
 * [komga](https://hub.docker.com/r/gotson/komga)
-* [alpine v3.19](https://hub.docker.com/_/alpine)
+* [alpine v3.20](https://hub.docker.com/_/alpine)
