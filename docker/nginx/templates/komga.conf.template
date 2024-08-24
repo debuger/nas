@@ -1,11 +1,11 @@
 server {
-    listen ${NGINX_SSL_PORT} ssl http2;
-    listen [::]:${NGINX_SSL_PORT} ssl http2;
-    include "conf.d/gzip.conf";
-    include "conf.d/ssl.conf";
+    listen ${NGINX_PORT};
+    listen [::]:${NGINX_PORT};
+    http2 on;
+    include "conf.d/include/gzip.conf";
     error_log  /log/nginx/komga.log warn;
     access_log /log/nginx/komga.log;
-    server_name komga.${NGINX_HOST};
+    server_name comics.${NGINX_HOST};
     client_max_body_size 512M;
     large_client_header_buffers 4 32k;
     location / {
@@ -17,4 +17,13 @@ server {
         proxy_set_header        Connection "upgrade";
         proxy_pass              http://komga:25600;
     }
+}
+
+server {
+    listen ${NGINX_SSL_PORT};
+    listen [::]:${NGINX_SSL_PORT};
+    error_log  /log/nginx/komga.log warn;
+    access_log /log/nginx/komga.log;
+    server_name comics.${NGINX_HOST};
+    return 301 http://komga.${NGINX_HOST};
 }
