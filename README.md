@@ -26,7 +26,7 @@ Services inclueded
 * [xteve](https://github.com/xteve-project/xTeVe)
 * [transmission](https://transmissionbt.com/)
 * [proftp](http://www.proftpd.org/)
-
+* [komga](https://komga.org/)
 
 
 Certbot
@@ -79,3 +79,4 @@ Docker images used:
 * [mariadb](https://hub.docker.com/_/mariadb)
 * [transmission](https://hub.docker.com/r/linuxserver/transmission)
 * [alpine v3.16.3](https://hub.docker.com/_/alpine)
+* [komga](https://hub.docker.com/r/gotson/komga)

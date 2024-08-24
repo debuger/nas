@@ -1,0 +1,1 @@
+FROM gotson/komga:1.11.2
