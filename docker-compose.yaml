@@ -421,7 +421,7 @@ volumes:
     driver_opts:
       type: bind
       o: bind
-      device: "${PWD}/system/comga"
+      device: "${PWD}/system/komga"
   comics: 
     driver: local
     driver_opts:
