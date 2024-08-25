@@ -1,0 +1,13 @@
+#!/bin/bash
+source `(readlink -f $(dirname $0)/.import_env)`
+
+function expandCertbot() {
+	docker-compose ${DOCKER_COMPOSE_ARGS} run --entrypoint /usr/local/bin/certbot certbot certonly -n --webroot -v --webroot-path /var/www/certbot/ --config-dir /var/www/certbot/config --logs-dir /var/log/letsencrypt/ --work-dir /var/www/certbot/work -d $1
+}
+
+
+expandCertbot "${NGINX_HOST}"
+expandCertbot "calibre.${NGINX_HOST}"
+expandCertbot "transmission.${NGINX_HOST}"
+expandCertbot "nextcloud.${NGINX_HOST}"
+expandCertbot "comics.${NGINX_HOST}"

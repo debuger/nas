@@ -1,0 +1,6 @@
+#!/bin/sh
+DOCKER_DIRECTORY=`(readlink -f $(dirname $0)/../)`
+eval $(cat $DOCKER_DIRECTORY/.env \
+    | grep -v "#" \
+    | sed -E 's/^([^=]*)=(.*)$/export \1="\2"/p')
+DOCKER_COMPOSE_ARGS="--project-directory ${DOCKER_DIRECTORY} "`echo ${DOCKER_COMPOSE_ARGS} | sed -E 's#(--file) ([[:alnum:]]*)#-f '"$DOCKER_DIRECTORY"'\/\2#g'`
