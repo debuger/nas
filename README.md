@@ -83,6 +83,11 @@ Check permissions `/etc/permissions.local`
 /usr/bin/Xorg root:root 0755
 ```
 
+OPDS
+----
+* [Comics catalog](https://comics.${NGINX_HOST}/opds/v2/catalog)
+* [Books catalog](https://calibre.${NGINX_HOST}/opds)
+
 Docker images used:
 -----
 * [plex](https://hub.docker.com/r/linuxserver/plex)
