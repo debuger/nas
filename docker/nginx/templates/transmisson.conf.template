@@ -2,6 +2,7 @@ server {
     listen ${NGINX_SSL_PORT} ssl;
     listen [::]:${NGINX_SSL_PORT} ssl;
     http2 on;
+    include "conf.d/include/site-block.conf";
     include "conf.d/include/gzip.conf";
     error_log  /log/nginx/transmission.log warn;
     access_log /log/nginx/transmission.log;

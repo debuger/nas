@@ -1,7 +1,7 @@
 server {
     listen ${NGINX_PORT};
     listen [::]:${NGINX_PORT};
-    http2 on;
+    include "conf.d/include/site-block.conf";
     include "conf.d/include/gzip.conf";
     error_log  /log/nginx/xteve.log warn;
     access_log /log/nginx/xteve.log;
@@ -21,6 +21,7 @@ server {
 server {
     listen ${NGINX_SSL_PORT};
     listen [::]:${NGINX_SSL_PORT};
+    http2 on;
     error_log  /log/nginx/xteve.log warn;
     access_log /log/nginx/xteve.log;
     server_name xteve.${NGINX_HOST};
