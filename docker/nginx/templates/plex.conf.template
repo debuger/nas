@@ -1,7 +1,7 @@
 server {
     listen ${NGINX_PORT};
     listen [::]:${NGINX_PORT};
-    http2 on;
+    include "conf.d/include/site-block.conf";
     error_log  /log/nginx/plex.log warn;
     access_log /log/nginx/plex.log;
     server_name plex.${NGINX_HOST};
@@ -19,6 +19,7 @@ server {
 server {
     listen ${NGINX_SSL_PORT};
     listen [::]:${NGINX_SSL_PORT};
+    http2 on;
     error_log  /log/nginx/plex.log warn;
     access_log /log/nginx/plex.log;
     server_name plex.${NGINX_HOST};

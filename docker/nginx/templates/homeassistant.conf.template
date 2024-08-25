@@ -4,6 +4,7 @@ server {
     http2 on;
     include "conf.d/include/gzip.conf";
     include "conf.d/include/ssl.conf";
+    include "conf.d/include/site-block.conf";
     error_log  /log/nginx/homeassistant.log warn;
     access_log /log/nginx/homeassistant.log;
     server_name ha.${NGINX_HOST};

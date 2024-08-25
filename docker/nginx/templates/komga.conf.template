@@ -1,8 +1,8 @@
 server {
     listen ${NGINX_PORT};
     listen [::]:${NGINX_PORT};
-    http2 on;
     include "conf.d/include/gzip.conf";
+    include "conf.d/include/site-block.conf";
     error_log  /log/nginx/komga.log warn;
     access_log /log/nginx/komga.log;
     server_name comics.${NGINX_HOST};
@@ -22,6 +22,7 @@ server {
 server {
     listen ${NGINX_SSL_PORT};
     listen [::]:${NGINX_SSL_PORT};
+    http2 on;
     error_log  /log/nginx/komga.log warn;
     access_log /log/nginx/komga.log;
     server_name comics.${NGINX_HOST};
