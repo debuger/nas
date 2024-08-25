@@ -101,3 +101,4 @@ Docker images used:
 * [certbot](https://hub.docker.com/r/certbot/certbot)
 * [komga](https://hub.docker.com/r/gotson/komga)
 * [alpine v3.20](https://hub.docker.com/_/alpine)
+* [logrotate](https://hub.docker.com/r/sequenceiq/logrotate)
