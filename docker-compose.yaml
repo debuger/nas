@@ -273,6 +273,21 @@ services:
       - .env
     restart: unless-stopped
     logging: *glog
+  logrotate:
+    image: sequenceiq/logrotate:latest
+    user: ${CUSTOM_UID}:${CUSTOM_GID}
+    volumes:
+      - log:/logs
+    env_file:
+      - .env
+    environment:
+      - TZ=${TZ}
+      - LOGROTATE_LOGFILES=/logs
+      - CRON_EXPR="0 6 * * *"
+      - LOGROTATE_FILESIZE=${LOGROTATE_FILESIZE}
+      - LOGROTATE_FILENUM=${LOGROTATE_FILENUM}
+    restart: unless-stopped
+    logging: *glog
 volumes:
   plexlibrary:
     driver_opts:
