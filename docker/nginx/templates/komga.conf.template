@@ -21,6 +21,6 @@ server {
         proxy_set_header        X-Forwarded-Proto $scheme;
         proxy_set_header        Upgrade $http_upgrade;
         proxy_set_header        Connection "upgrade";
-        proxy_pass              https://komga:25600;
+        proxy_pass              http://komga:25600;
     }
 }
