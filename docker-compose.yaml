@@ -140,6 +140,7 @@ services:
       - calibrelibrary:/config
       - books:/books
       - tmp:/tmp
+      - log:/logs
     env_file:
       - .env
     restart: unless-stopped
@@ -264,8 +265,7 @@ services:
     volumes:
       - komga:/config
       - comics:/data
-    ports:
-      - 25600:25600
+      - log:/config/logs/
     user: ${CUSTOM_UID}:${CUSTOM_GID}
     environment:
       - TZ=${TZ}
