@@ -43,6 +43,14 @@ docker-compose run --rm  certbot certonly --webroot -v --webroot-path /var/www/c
 ```
 and update configs after result [see source](https://mindsers.blog/post/https-using-nginx-certbot-docker/)
 
+On setup 
+* rename all templates except `default` for nginx hosts to `.bak` in `docker/nginx/templates`
+* run `www` service and exec `bin/certbot` to generate all certificates.
+* shutdown `www` service
+* rename templates back
+* rebuild `www` service
+
+
 Extra for KODI on host machine
 -----
 Check service `/usr/lib/systemd/system/kodi.service`
