@@ -2,8 +2,8 @@ server {
     listen ${NGINX_PORT};
     listen [::]:${NGINX_PORT};
     include "conf.d/include/site-block.conf";
-    error_log  /log/nginx/plex.log warn;
-    access_log /log/nginx/plex.log;
+    error_log  /log/nginx/plex.log error;
+    access_log /log/nginx/plex.log main;
     server_name plex.${NGINX_HOST};
     client_max_body_size 128M;
     large_client_header_buffers 4 32k;

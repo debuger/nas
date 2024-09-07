@@ -3,8 +3,8 @@ server {
     listen [::]:${NGINX_PORT};
     include "conf.d/include/gzip.conf";
     include "conf.d/include/site-block.conf";
-    error_log /log/nginx/hlsproxy.log warn;
-    access_log /log/nginx/hlsproxy.log;
+    error_log /log/nginx/hlsproxy.log error;
+    access_log /log/nginx/hlsproxy.log main;
     server_name hlsproxy.${NGINX_HOST};
     location / {
         proxy_http_version 1.1;

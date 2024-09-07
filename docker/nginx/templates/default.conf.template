@@ -16,8 +16,8 @@ server {
 server {
     index index.php index.html;
     server_name *.${NGINX_HOST};
-    error_log  /log/nginx/error.log;
-    access_log /log/nginx/access.log;
+    error_log  /log/nginx/error.log error;
+    access_log /log/nginx/access.log main;
     include "conf.d/include/gzip.conf";
     include "conf.d/include/ssl.redirect.conf";
     include "conf.d/include/site-block.conf";

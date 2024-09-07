@@ -4,8 +4,8 @@ server {
     http2 on;
     include "conf.d/include/gzip.conf";
     include "conf.d/include/site-block.conf";
-    error_log  /log/nginx/komga.log warn;
-    access_log /log/nginx/komga.log;
+    error_log  /log/nginx/komga.log error;
+    access_log /log/nginx/komga.log main;
     server_name comics.${NGINX_HOST};
     client_max_body_size 512M;
     large_client_header_buffers 4 32k;
