@@ -4,8 +4,8 @@ server {
     http2 on;
     include "conf.d/include/site-block.conf";
     include "conf.d/include/gzip.conf";
-    error_log  /log/nginx/transmission.log warn;
-    access_log /log/nginx/transmission.log;
+    error_log  /log/nginx/transmission.log error;
+    access_log /log/nginx/transmission.log main;
     server_name transmission.${NGINX_HOST};
 
     include "conf.d/include/ssl.conf";
