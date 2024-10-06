@@ -295,13 +295,13 @@ services:
       - LOGROTATE_FILENUM=${LOGROTATE_FILENUM}
     restart: unless-stopped
     logging: *glog
-  ollama:
+ ollama:
     build:
       context:  ${PWD}/docker/ollama
-      dockerfile: ${PWD}/docker/ollama/Dockerfile 
+      dockerfile: ${PWD}/docker/ollama/Dockerfile
     container_name: ollama
     volumes:
-      - ollama:/root/.ollama
+      - ollama:/.ollama
     user: ${CUSTOM_UID}:${CUSTOM_GID}
     environment:
       - TZ=${TZ}
@@ -314,14 +314,14 @@ services:
   webui:
     build:
       context:  ${PWD}/docker/webui
-      dockerfile: ${PWD}/docker/webui/Dockerfile 
+      dockerfile: ${PWD}/docker/webui/Dockerfile
     container_name: webui
     volumes:
       - webui:/app/backend/data
-    user: ${CUSTOM_UID}:${CUSTOM_GID}
     environment:
       - TZ=${TZ}
-      - OLLAMA_BASE_URL=ollama
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - WEBUI_SECRET_KEY=
     env_file:
       - .env
     restart: unless-stopped
