@@ -74,6 +74,7 @@ services:
        - xteve
        - transmissionbt
        - komga
+       - ollama
     logging: *glog
   certbot:
     image: certbot/certbot:v2.11.0
@@ -294,6 +295,39 @@ services:
       - LOGROTATE_FILENUM=${LOGROTATE_FILENUM}
     restart: unless-stopped
     logging: *glog
+  ollama:
+    build:
+      context:  ${PWD}/docker/ollama
+      dockerfile: ${PWD}/docker/ollama/Dockerfile 
+    container_name: ollama
+    volumes:
+      - ollama:/root/.ollama
+    user: ${CUSTOM_UID}:${CUSTOM_GID}
+    environment:
+      - TZ=${TZ}
+    env_file:
+      - .env
+    ports:
+      - "11434:11434"
+    restart: unless-stopped
+    logging: *glog
+  webui:
+    build:
+      context:  ${PWD}/docker/webui
+      dockerfile: ${PWD}/docker/webui/Dockerfile 
+    container_name: webui
+    volumes:
+      - webui:/app/backend/data
+    user: ${CUSTOM_UID}:${CUSTOM_GID}
+    environment:
+      - TZ=${TZ}
+      - OLLAMA_BASE_URL=ollama
+    env_file:
+      - .env
+    restart: unless-stopped
+    depends_on:
+      - ollama
+    logging: *glog
 volumes:
   plexlibrary:
     driver_opts:
@@ -450,3 +484,15 @@ volumes:
       type: bind
       o: bind
       device: "${PWD}/fs/comics"
+  ollama:
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/system/ollama"
+  webui:
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/system/webui"
