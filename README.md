@@ -39,7 +39,7 @@ Certbot
 ----
 To generate sertificate run command 
 ```
-docker-compose run --rm  certbot certonly --webroot -v --webroot-path /var/www/certbot/ --config-dir /var/www/certbot/config --logs-dir /var/log/letsencrypt/ --work-dir /var/www/certbot/work -d ${NGINX_HOST}
+docker-compose run --entrypoint /usr/local/bin/certbot certbot certonly -n --webroot -v --webroot-path /var/www/certbot/ --config-dir /var/www/certbot/config --logs-dir /var/log/letsencrypt/ --work-dir /var/www/certbot/work -d ${NGINX_HOST}
 ```
 and update configs after result [see source](https://mindsers.blog/post/https-using-nginx-certbot-docker/)
 
@@ -87,6 +87,11 @@ OPDS
 ----
 * [Comics catalog](https://comics.${NGINX_HOST}/opds/v2/catalog)
 * [Books catalog](https://calibre.${NGINX_HOST}/opds)
+
+LLM
+----
+ docker-compose exec ollama ollama pull ilyagusev/saiga_llama3
+ docker-compose exec ollama ollama pull llama3.1
 
 Docker images used:
 -----
