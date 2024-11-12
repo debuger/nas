@@ -1,1 +1,1 @@
-FROM gotson/komga:1.11.2
+FROM gotson/komga:1.14.1
