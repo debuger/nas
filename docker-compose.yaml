@@ -295,7 +295,7 @@ services:
       - LOGROTATE_FILENUM=${LOGROTATE_FILENUM}
     restart: unless-stopped
     logging: *glog
- ollama:
+  ollama:
     build:
       context:  ${PWD}/docker/ollama
       dockerfile: ${PWD}/docker/ollama/Dockerfile
