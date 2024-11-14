@@ -43,6 +43,8 @@ services:
         tag: "{{.ImageName}}/{{.Name}}"
         max-size: "5m"
         max-file: "3"
+    networks: &nas
+      - nas
   www:
     build:
       context: ${PWD}/docker/nginx
@@ -76,8 +78,9 @@ services:
        - komga
        - ollama
     logging: *glog
+    networks: *nas
   certbot:
-    image: certbot/certbot:v3.0.0
+    image: certbot/certbot:v2.11.0
     user: ${CUSTOM_UID}:${CUSTOM_GID}
     volumes:
       - certbot:/var/www/certbot/:rw
@@ -89,6 +92,7 @@ services:
     entrypoint:
       /usr/local/bin/certbot renew --webroot -v --webroot-path /var/www/certbot/ --config-dir /var/www/certbot/config --logs-dir /var/log/letsencrypt/ --work-dir /var/www/certbot/work
     logging: *glog
+    networks: *nas
   php:
     build:
       context: ${PWD}/docker/php
@@ -102,6 +106,7 @@ services:
       - .env
     restart: unless-stopped
     logging: *glog
+    networks: *nas
   nextcloud:
     build:
       context: ${PWD}/docker/nextcloud
@@ -127,6 +132,7 @@ services:
       - mariadb
     restart: unless-stopped
     logging: *glog
+    networks: *nas
   calibre-web:
     build:
       context: ${PWD}/docker/calibre
@@ -146,6 +152,7 @@ services:
       - .env
     restart: unless-stopped
     logging: *glog
+    networks: *nas
   mariadb:
     build:
       context: ${PWD}/docker/mariadb
@@ -159,6 +166,7 @@ services:
       - .env
     restart: unless-stopped
     logging: *glog
+    networks: *nas
   hlsproxy:
     build:
       context: ${PWD}/docker/hlsproxy
@@ -176,6 +184,7 @@ services:
       - .env
     restart: unless-stopped
     logging: *glog
+    networks: *nas
   xteve:
     build:
       context: ${PWD}/docker/xteve
@@ -195,6 +204,7 @@ services:
       - hlsproxy
     restart: unless-stopped
     logging: *glog
+    networks: *nas
   transmissionbt:
     build:
       context: ${PWD}/docker/transmission
@@ -215,6 +225,7 @@ services:
       - .env
     restart: unless-stopped
     logging: *glog
+    networks: *nas
   proftp:
     build:
       context: ${PWD}/docker/proftpd
@@ -240,6 +251,7 @@ services:
       - .env
     restart: unless-stopped
     logging: *glog
+    networks: *nas
   homeassistant:
     build:
       context: ${PWD}/docker/homeassistant
@@ -258,6 +270,7 @@ services:
       - .env
     restart: unless-stopped
     logging: *glog
+    networks: *nas
   komga:
     build:
       context:  ${PWD}/docker/komga
@@ -274,6 +287,7 @@ services:
       - .env
     restart: unless-stopped
     logging: *glog
+    networks: *nas
   logrotate:
     build:
       context:  ${PWD}/docker/logrotate
@@ -295,6 +309,7 @@ services:
       - LOGROTATE_FILENUM=${LOGROTATE_FILENUM}
     restart: unless-stopped
     logging: *glog
+    networks: *nas
   ollama:
     build:
       context:  ${PWD}/docker/ollama
@@ -311,6 +326,7 @@ services:
       - "11434:11434"
     restart: unless-stopped
     logging: *glog
+    networks: *nas
   webui:
     build:
       context:  ${PWD}/docker/webui
@@ -328,6 +344,16 @@ services:
     depends_on:
       - ollama
     logging: *glog
+    networks: *nas
+networks:
+  nas:
+    driver: bridge
+    enable_ipv6: true
+    internal: true
+    ipam:
+      config:
+       - subnet: fc25:db8:1::/64
+       - subnet: 172.25.0.0/16
 volumes:
   plexlibrary:
     driver_opts:
