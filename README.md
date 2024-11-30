@@ -32,7 +32,8 @@ Services inclueded
 * [proftp](http://www.proftpd.org/)
 * [home assistant](https://home-assistant.io)
 * [komga](https://komga.org/)
-
+* [ollama](https://ollama.com/)
+* [openwebui](https://docs.openwebui.com/)
 
 
 Certbot
@@ -105,4 +106,5 @@ Docker images used:
 * [home assistant](https://hub.docker.com/r/homeassistant/home-assistant)
 * [certbot](https://hub.docker.com/r/certbot/certbot)
 * [komga](https://hub.docker.com/r/gotson/komga)
+* [ollama](https://hub.docker.com/r/ollama/ollama)
 * [alpine v3.20](https://hub.docker.com/_/alpine)
