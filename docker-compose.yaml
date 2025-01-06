@@ -347,13 +347,17 @@ services:
     networks: *nas
 networks:
   nas:
+    name: nas
     driver: bridge
     enable_ipv6: true
-    internal: true
+    #internal: true
     ipam:
       config:
        - subnet: fc25:db8:1::/64
        - subnet: 172.25.0.0/16
+  deafult:
+    external: true
+    name: none
 volumes:
   plexlibrary:
     driver_opts:
