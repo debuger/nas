@@ -272,7 +272,7 @@ services:
     logging: *glog
     networks:
       - nas
-      - ha
+      - host
   komga:
     build:
       context:  ${PWD}/docker/komga
@@ -355,9 +355,9 @@ networks:
       config:
        - subnet: fc25:db8:1::/64
        - subnet: 172.25.0.0/16
-  ha:
-    name: ha
-    driver: host
+  host:
+    name: host
+    external: true
   default:
     external: true
     name: none
