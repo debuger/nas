@@ -271,6 +271,7 @@ services:
     restart: unless-stopped
     logging: *glog
     networks: *nas
+      - ha
   komga:
     build:
       context:  ${PWD}/docker/komga
@@ -322,8 +323,6 @@ services:
       - TZ=${TZ}
     env_file:
       - .env
-    ports:
-      - "11434:11434"
     restart: unless-stopped
     logging: *glog
     networks: *nas
@@ -355,7 +354,10 @@ networks:
       config:
        - subnet: fc25:db8:1::/64
        - subnet: 172.25.0.0/16
-  deafult:
+  ha:
+    name: ha
+    driver: host
+  default:
     external: true
     name: none
 volumes:
