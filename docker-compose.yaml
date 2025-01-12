@@ -270,7 +270,8 @@ services:
       - .env
     restart: unless-stopped
     logging: *glog
-    networks: *nas
+    networks:
+      - nas
       - ha
   komga:
     build:
