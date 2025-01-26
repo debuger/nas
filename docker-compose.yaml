@@ -368,12 +368,12 @@ services:
       - SPAWN_MONSTERS=true
       - MODE=survival
       - SERVER_NAME=${MC_SERVER}
-      - SERVER_PORT=25565
+      - SERVER_PORT=19132
       - LEVEL=world
-      - VIEW_DISTANCE=5
-      - VERSION=23w17a
+      - VIEW_DISTANCE=10
+      - MEMORY=4G
     ports:
-      - 25565:${MC_PORT}
+      - 19132:${MC_PORT}/udp
     volumes:
       - mcdata:/data
     logging: *glog
