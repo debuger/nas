@@ -1,1 +1,1 @@
-FROM itzg/minecraft-server
+FROM itzg/minecraft-bedrock-server

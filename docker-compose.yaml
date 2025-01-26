@@ -353,11 +353,10 @@ services:
     stdin_open: true
     environment:
       - TZ=${TZ}
-      - EULA="TRUE"
+      - EULA=true
       - MOTD=${MC_MOTD}
-      - DIFFICULTY="easy"
-      - WHITELIST_FILE=${PWD}/docker/minecraft/whitelist.json
-      - OPS=${MC_OPS}
+      - DIFFICULTY=easy
+      - ONLINE_MODE=false
       - MAX_WORLD_SIZE=10000
       - ALLOW_NETHER=false
       - ANNOUNCE_PLAYER_ACHIEVEMENTS=true
@@ -369,8 +368,12 @@ services:
       - SPAWN_MONSTERS=true
       - MODE=survival
       - SERVER_NAME=${MC_SERVER}
+      - SERVER_PORT=19132
+      - LEVEL=world
+      - VIEW_DISTANCE=10
+      - MEMORY=4G
     ports:
-      - "25565:25565"
+      - 19132:${MC_PORT}/udp
     volumes:
       - mcdata:/data
     logging: *glog
@@ -386,8 +389,9 @@ networks:
        - subnet: fc25:db8:1::/64
        - subnet: 172.25.0.0/16
   ha:
-    name: ha
+    name: host
     driver: host
+    external: true
   default:
     external: true
     name: none
