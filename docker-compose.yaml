@@ -345,6 +345,36 @@ services:
       - ollama
     logging: *glog
     networks: *nas
+  mc:
+    build:
+      context:  ${PWD}/docker/minecraft
+      dockerfile: ${PWD}/docker/minecraft/Dockerfile
+    tty: true
+    stdin_open: true
+    environment:
+      - TZ=${TZ}
+      - EULA="TRUE"
+      - MOTD=${MC_MOTD}
+      - DIFFICULTY="easy"
+      - WHITELIST_FILE=${PWD}/docker/minecraft/whitelist.json
+      - OPS=${MC_OPS}
+      - MAX_WORLD_SIZE=10000
+      - ALLOW_NETHER=false
+      - ANNOUNCE_PLAYER_ACHIEVEMENTS=true
+      - FORCE_GAMEMODE=false
+      - GENERATE_STRUCTURES=true
+      - HARDCORE=false
+      - MAX_BUILD_HEIGHT=256
+      - SPAWN_ANIMALS=true
+      - SPAWN_MONSTERS=true
+      - MODE=survival
+      - SERVER_NAME=${MC_SERVER}
+    ports:
+      - "25565:25565"
+    volumes:
+      - mcdata:/data
+    logging: *glog
+    networks: *nas
 networks:
   nas:
     name: nas
@@ -529,3 +559,9 @@ volumes:
       type: bind
       o: bind
       device: "${PWD}/system/webui"
+  mcdata:
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/fs/mcdata"
