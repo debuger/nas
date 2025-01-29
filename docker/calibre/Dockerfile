@@ -1,1 +1,1 @@
-FROM ghcr.io/linuxserver/calibre-web:0.6.23-ls298
+FROM ghcr.io/linuxserver/calibre-web:0.6.24-ls312
