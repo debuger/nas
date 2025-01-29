@@ -80,7 +80,7 @@ services:
     logging: *glog
     networks: *nas
   certbot:
-    image: certbot/certbot:v2.11.0
+    image: certbot/certbot:v3.1.0
     user: ${CUSTOM_UID}:${CUSTOM_GID}
     volumes:
       - certbot:/var/www/certbot/:rw

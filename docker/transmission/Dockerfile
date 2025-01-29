@@ -1,1 +1,1 @@
-FROM lscr.io/linuxserver/transmission:4.0.6-r0-ls265
+FROM lscr.io/linuxserver/transmission:4.0.6-r2-ls280
