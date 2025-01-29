@@ -368,12 +368,16 @@ services:
       - SPAWN_MONSTERS=true
       - MODE=survival
       - SERVER_NAME=${MC_SERVER}
-      - SERVER_PORT=19132
+      - SERVER_PORT=${MC_PORT_INTERNAL}
       - LEVEL=world
       - VIEW_DISTANCE=10
-      - MEMORY=4G
+      - MEMORY=2G
+      - WHITELIST_FILE=${PWD}/docker/minecraft/whitelist.json
+      - OPS_FILE=${PWD}/docker/minecraft/ops.json
+      - RCON_PASSWORD=${MC_RCON_PASS}
+#      - VERSION=23w17a
     ports:
-      - 19132:${MC_PORT}/udp
+      - ${MC_PORT_INTERNAL}:${MC_PORT}/udp
     volumes:
       - mcdata:/data
     logging: *glog
