@@ -338,6 +338,7 @@ services:
       - TZ=${TZ}
       - OLLAMA_BASE_URL=http://ollama:11434
       - WEBUI_SECRET_KEY=
+      - AIOHTTP_CLIENT_TIMEOUT=
     env_file:
       - .env
     restart: unless-stopped
