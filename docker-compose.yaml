@@ -324,6 +324,8 @@ services:
       - TZ=${TZ}
     env_file:
       - .env
+    devices:
+      - /dev/dri:/dev/dri
     restart: unless-stopped
     logging: *glog
     networks: *nas
@@ -376,7 +378,9 @@ services:
       - WHITELIST_FILE=${PWD}/docker/minecraft/whitelist.json
       - OPS_FILE=${PWD}/docker/minecraft/ops.json
       - RCON_PASSWORD=${MC_RCON_PASS}
-#      - VERSION=23w17a
+      - VERSION=${MC_VERSION}
+      - UID=${CUSTOM_UID}
+      - GID=${CUSTOM_GID}
     ports:
       - ${MC_PORT_INTERNAL}:${MC_PORT}/udp
     volumes:
