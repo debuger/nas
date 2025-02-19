@@ -379,8 +379,8 @@ services:
       - OPS_FILE=${PWD}/docker/minecraft/ops.json
       - RCON_PASSWORD=${MC_RCON_PASS}
       - VERSION=${MC_VERSION}
-      - UID=${CUSTOM_GID}
-      - GID=${CUSTOM_UID}
+      - UID=${CUSTOM_UID}
+      - GID=${CUSTOM_GID}
     ports:
       - ${MC_PORT_INTERNAL}:${MC_PORT}/udp
     volumes:
