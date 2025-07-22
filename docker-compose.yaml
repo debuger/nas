@@ -386,6 +386,7 @@ services:
     volumes:
       - mcdata:/data
     logging: *glog
+    restart: unless-stopped
     networks: *nas
 networks:
   nas:
