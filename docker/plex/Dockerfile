@@ -1,1 +1,1 @@
-FROM lscr.io/linuxserver/plex:1.41.5.9522-a96edc606-ls260
+FROM lscr.io/linuxserver/plex:1.41.9.9961-46083195d-ls274
