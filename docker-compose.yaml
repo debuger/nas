@@ -604,7 +604,8 @@ volumes:
       type: bind
       o: bind
       device: "${PWD}/system/ollama"
-  ollama_models: local
+  ollama_models:
+    driver: local
     driver_opts:
       type: bind
       o: bind
