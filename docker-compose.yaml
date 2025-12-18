@@ -325,11 +325,21 @@ services:
       context:  ${PWD}/docker/ollama
       dockerfile: ${PWD}/docker/ollama/Dockerfile
     container_name: ollama
+    read_only: true
+    tmpfs:
+      - /run:exec
+      - /tmp
     volumes:
       - ollama:/.ollama
+      - ollama_models:/models
     user: ${CUSTOM_UID}:${CUSTOM_GID}
     environment:
       - TZ=${TZ}
+      - HOME=/
+      - OLLAMA_HOST=0.0.0.0:11434
+      - OLLAMA_MODELS=/models
+      - OLLAMA_VULKAN=1
+      - OLLAMA_NEW_ENGINE=1
     env_file:
       - .env
     devices:
@@ -358,8 +368,9 @@ services:
       - WEBUI_SECRET_KEY=tt-docker-ui
       - ENABLE_OPENAI_API
       - OPENAI_API_KEY=${OPENAPI_KEY}
-      - http_proxy=${HTTP_PROXY}
-      - https_proxy=${HTTPS_PROXY}
+      - http_proxy=${WEBUI_HTTP_PROXY}
+      - https_proxy=${WEBUI_HTTPS_PROXY}
+      - no_proxy=ollama
       - WEB_SEARCH_TRUST_ENV=true
     env_file:
       - .env
@@ -593,6 +604,11 @@ volumes:
       type: bind
       o: bind
       device: "${PWD}/system/ollama"
+  ollama_models: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/fs/ollama"
   webui:
     driver: local
     driver_opts:
