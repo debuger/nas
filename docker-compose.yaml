@@ -79,6 +79,7 @@ services:
        - transmissionbt
        - komga
        - ollama
+       - n8n-main
     logging: *glog
     networks:
        - nas
@@ -260,27 +261,27 @@ services:
     logging: *glog
     networks:
       - nas
-  homeassistant:
-    build:
-      context: ${PWD}/docker/homeassistant
-      dockerfile: ${PWD}/docker/homeassistant/Dockerfile
-    container_name: homeassistant
-    environment:
-      - TZ=${TZ}
-      - PUID=${CUSTOM_UID}
-      - PGID=${CUSTOM_GID}
-    volumes:
-      - homeassistantconfig:/config
-      - /etc/localtime:/etc/localtime:ro
-    privileged: true
-    user: ${CUSTOM_UID}:${CUSTOM_GID}
-    env_file:
-      - .env
-    restart: unless-stopped
-    logging: *glog
-    networks:
-      - nas
-#      - ha
+#   homeassistant:
+#     build:
+#       context: ${PWD}/docker/homeassistant
+#       dockerfile: ${PWD}/docker/homeassistant/Dockerfile
+#     container_name: homeassistant
+#     environment:
+#       - TZ=${TZ}
+#       - PUID=${CUSTOM_UID}
+#       - PGID=${CUSTOM_GID}
+#     volumes:
+#       - homeassistantconfig:/config
+#       - /etc/localtime:/etc/localtime:ro
+#     privileged: true
+#     user: ${CUSTOM_UID}:${CUSTOM_GID}
+#     env_file:
+#       - .env
+#     restart: unless-stopped
+#     logging: *glog
+#     networks:
+#       - nas
+#       - ha
   komga:
     build:
       context:  ${PWD}/docker/komga
@@ -380,47 +381,80 @@ services:
     logging: *glog
     networks:
       - nas
-  mc:
-    build:
-      context:  ${PWD}/docker/minecraft
-      dockerfile: ${PWD}/docker/minecraft/Dockerfile
-    tty: true
-    stdin_open: true
+  # mc:
+  #   build:
+  #     context:  ${PWD}/docker/minecraft
+  #     dockerfile: ${PWD}/docker/minecraft/Dockerfile
+  #   tty: true
+  #   stdin_open: true
+  #   environment:
+  #     - TZ=${TZ}
+  #     - EULA=true
+  #     - MOTD=${MC_MOTD}
+  #     - DIFFICULTY=easy
+  #     - ONLINE_MODE=false
+  #     - MAX_WORLD_SIZE=10000
+  #     - ALLOW_NETHER=false
+  #     - ANNOUNCE_PLAYER_ACHIEVEMENTS=true
+  #     - FORCE_GAMEMODE=false
+  #     - GENERATE_STRUCTURES=true
+  #     - HARDCORE=false
+  #     - MAX_BUILD_HEIGHT=256
+  #     - SPAWN_ANIMALS=true
+  #     - SPAWN_MONSTERS=true
+  #     - MODE=survival
+  #     - SERVER_NAME=${MC_SERVER}
+  #     - SERVER_PORT=${MC_PORT_INTERNAL}
+  #     - LEVEL=world
+  #     - VIEW_DISTANCE=10
+  #     - MEMORY=2G
+  #     - WHITELIST_FILE=${PWD}/docker/minecraft/whitelist.json
+  #     - OPS_FILE=${PWD}/docker/minecraft/ops.json
+  #     - RCON_PASSWORD=${MC_RCON_PASS}
+  #     - VERSION=${MC_VERSION}
+  #     - UID=${CUSTOM_UID}
+  #     - GID=${CUSTOM_GID}
+  #   ports:
+  #     - ${MC_PORT_INTERNAL}:${MC_PORT}/udp
+  #   volumes:
+  #     - mcdata:/data
+  #   logging: *glog
+  #   restart: unless-stopped
+  #   networks:
+  #     - nas
+  n8n-main:
+    image: n8nio/n8n:2.31.1
+    container_name: n8n-main
     environment:
+      - N8N_RUNNERS_ENABLED=true
+      - N8N_RUNNERS_MODE=external
+      - N8N_RUNNERS_BROKER_LISTEN_ADDRESS=0.0.0.0
+      - N8N_RUNNERS_AUTH_TOKEN=${n8ntoken}
+      - N8N_NATIVE_PYTHON_RUNNER=true
+      - N8N_RUNNERS_BROKER_PORT=5679
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+      - GENERIC_TIMEZONE=${TZ}
       - TZ=${TZ}
-      - EULA=true
-      - MOTD=${MC_MOTD}
-      - DIFFICULTY=easy
-      - ONLINE_MODE=false
-      - MAX_WORLD_SIZE=10000
-      - ALLOW_NETHER=false
-      - ANNOUNCE_PLAYER_ACHIEVEMENTS=true
-      - FORCE_GAMEMODE=false
-      - GENERATE_STRUCTURES=true
-      - HARDCORE=false
-      - MAX_BUILD_HEIGHT=256
-      - SPAWN_ANIMALS=true
-      - SPAWN_MONSTERS=true
-      - MODE=survival
-      - SERVER_NAME=${MC_SERVER}
-      - SERVER_PORT=${MC_PORT_INTERNAL}
-      - LEVEL=world
-      - VIEW_DISTANCE=10
-      - MEMORY=2G
-      - WHITELIST_FILE=${PWD}/docker/minecraft/whitelist.json
-      - OPS_FILE=${PWD}/docker/minecraft/ops.json
-      - RCON_PASSWORD=${MC_RCON_PASS}
-      - VERSION=${MC_VERSION}
-      - UID=${CUSTOM_UID}
-      - GID=${CUSTOM_GID}
-    ports:
-      - ${MC_PORT_INTERNAL}:${MC_PORT}/udp
+      - HTTP_PROXY=${WEBUI_HTTP_PROXY}
+      - HTTPS_PROXY=${WEBUI_HTTPS_PROXY}
+      - NO_PROXY=localhost,n8n-main,n8n-runners
+    user: ${CUSTOM_UID}:${CUSTOM_GID}
     volumes:
-      - mcdata:/data
-    logging: *glog
+      - n8ndata:/home/node/.n8n
+    env_file:
+      - .env
     restart: unless-stopped
-    networks:
-      - nas
+  n8n-runners:
+    image: n8nio/runners:2.31.1
+    container_name: n8n-runners
+    environment:
+      - N8N_RUNNERS_TASK_BROKER_URI=http://n8n-main:5679
+      - N8N_RUNNERS_AUTH_TOKEN=${n8ntoken}
+    env_file:
+      - .env
+    depends_on:
+      - n8n
+    restart: unless-stopped
 networks:
   nas:
     name: nas
@@ -621,3 +655,9 @@ volumes:
       type: bind
       o: bind
       device: "${PWD}/fs/mcdata"
+  n8ndata:
+    driver: local
+    driver_opts:
+      type: bind
+      o: bind
+      device: "${PWD}/fs/n8n"

@@ -30,12 +30,12 @@ Services inclueded
 * [xteve](https://github.com/xteve-project/xTeVe)
 * [transmission](https://transmissionbt.com/)
 * [proftp](http://www.proftpd.org/)
-* [home assistant](https://home-assistant.io)
+* ~~ [home assistant](https://home-assistant.io) ~~
 * [komga](https://komga.org/)
 * [ollama](https://ollama.com/)
 * [openwebui](https://docs.openwebui.com/)
-* [minecraft](https://www.minecraft.net/)
-
+* ~~ [minecraft](https://www.minecraft.net/) ~~
+* [n8n](https://n8n.io)
 
 Certbot
 ----
@@ -92,8 +92,10 @@ OPDS
 
 LLM
 ----
+```
  docker-compose exec ollama ollama pull ilyagusev/saiga_llama3
  docker-compose exec ollama ollama pull llama3.1
+```
 
 Docker images used:
 -----
@@ -104,9 +106,11 @@ Docker images used:
 * [calibre-web](https://hub.docker.com/r/linuxserver/calibre-web)
 * [mariadb](https://hub.docker.com/_/mariadb)
 * [transmission](https://hub.docker.com/r/linuxserver/transmission)
-* [home assistant](https://hub.docker.com/r/homeassistant/home-assistant)
+* ~~ [home assistant](https://hub.docker.com/r/homeassistant/home-assistant) ~~
 * [certbot](https://hub.docker.com/r/certbot/certbot)
 * [komga](https://hub.docker.com/r/gotson/komga)
 * [ollama](https://hub.docker.com/r/ollama/ollama)
 * [alpine v3.20](https://hub.docker.com/_/alpine)
-* [minecraft](https://github.com/itzg/docker-minecraft-server?tab=readme-ov-file)
+* ~~ [minecraft](https://github.com/itzg/docker-minecraft-server?tab=readme-ov-file) ~~
+* [n8n](https://hub.docker.com/r/n8nio/n8n)
+* [n8n-runners](https://hub.docker.com/r/n8nio/runners)
