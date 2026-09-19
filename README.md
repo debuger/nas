@@ -110,7 +110,7 @@ Docker images used:
 * [certbot](https://hub.docker.com/r/certbot/certbot)
 * [komga](https://hub.docker.com/r/gotson/komga)
 * [ollama](https://hub.docker.com/r/ollama/ollama)
-* [alpine v3.20](https://hub.docker.com/_/alpine)
+* [alpine v3.23](https://hub.docker.com/_/alpine)
 * ~~[minecraft](https://github.com/itzg/docker-minecraft-server?tab=readme-ov-file)~~
 * [n8n](https://hub.docker.com/r/n8nio/n8n)
 * [n8n-runners](https://hub.docker.com/r/n8nio/runners)
