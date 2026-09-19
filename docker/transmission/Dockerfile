@@ -1,1 +1,1 @@
-FROM lscr.io/linuxserver/transmission:4.1.3-r0-ls354
+FROM lscr.io/linuxserver/transmission:4.1.3-r0-ls362
